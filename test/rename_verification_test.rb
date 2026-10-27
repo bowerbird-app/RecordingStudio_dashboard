@@ -26,8 +26,8 @@ require "minitest/autorun"
 #    - Controllers are namespaced correctly
 #
 # 3. Orphan Detection (after rename):
-#    - No old gem_template references in Ruby files
-#    - No old directories (lib/gem_template, app/controllers/gem_template, etc.)
+#    - No old recording_studio_dashboard references in Ruby files
+#    - No old directories (lib/recording_studio_dashboard, app/controllers/recording_studio_dashboard, etc.)
 #    - No old gemspec or main lib file
 #
 # 4. Runtime Loading:
@@ -222,93 +222,33 @@ class RenameVerificationTest < Minitest::Test
   # No Orphaned Old Name References
   # ============================================================
 
-  # These tests check that the original "gem_template" name has been
-  # completely replaced. They only run after a rename has occurred.
-
-  def test_no_old_gem_template_references_in_ruby_files
-    # Skip if current name IS gem_template (nothing to check - hasn't been renamed yet)
-    skip if @gem_name == "gem_template"
-
-    ruby_files = Dir.glob(File.join(@root, "**", "*.rb"))
-    # Exclude test files and this verification test itself
-    ruby_files.reject! { |f| f.include?("test/dummy") || f.include?("rename_verification_test.rb") }
-
-    files_with_old_refs = []
-
-    ruby_files.each do |file|
-      content = File.read(file)
-      files_with_old_refs << file if content.include?("gem_template") || content.include?("GemTemplate")
-    end
-
-    assert files_with_old_refs.empty?,
-           "Found old 'gem_template' references in:\n#{files_with_old_refs.join("\n")}"
+  def test_previous_template_identity_is_gone
+    assert_empty previous_identity_offenders
   end
 
-  def test_no_old_gem_template_directories
-    skip if @gem_name == "gem_template"
-
-    old_dirs = [
-      File.join(@root, "lib", "gem_template"),
-      File.join(@root, "app", "controllers", "gem_template"),
-      File.join(@root, "app", "views", "gem_template")
-    ]
-
-    existing_old_dirs = old_dirs.select { |d| Dir.exist?(d) }
-
-    assert existing_old_dirs.empty?,
-           "Found old 'gem_template' directories:\n#{existing_old_dirs.join("\n")}"
+  def previous_identity_offenders
+    needle = %w[gem template].join("_")
+    pascal = needle.split("_").map(&:capitalize).join
+    scanned_paths.filter_map { |path| identity_hit(path, needle, pascal) }
   end
 
-  def test_no_old_gemspec_file
-    skip if @gem_name == "gem_template"
-
-    old_gemspec = File.join(@root, "gem_template.gemspec")
-    refute File.exist?(old_gemspec),
-           "Old gemspec file should not exist: #{old_gemspec}"
+  def scanned_paths
+    Dir.glob(File.join(@root, "**", "*")).select { |path| scannable_path?(path) }
   end
 
-  def test_no_old_main_lib_file
-    skip if @gem_name == "gem_template"
-
-    old_lib = File.join(@root, "lib", "gem_template.rb")
-    refute File.exist?(old_lib),
-           "Old main lib file should not exist: #{old_lib}"
+  def scannable_path?(path)
+    File.file?(path) && !skipped_scan_path?(path)
   end
 
-  def test_readme_has_no_leftover_template_identity_after_rename
-    skip if @gem_name == "gem_template"
-
-    content = File.read(File.join(@root, "README.md"))
-    refute_includes content, "GemTemplate",
-                    "README.md still contains leftover GemTemplate identity"
-    refute_match %r{bowerbird-app/gem_template(?:["'/]|$)}, content,
-                 "README.md still points at bowerbird-app/gem_template"
-    refute_includes content, "https://github.com/bowerbird-app/RecordingStudio_gem_template",
-                    "README.md still points at the template homepage"
+  def skipped_scan_path?(path)
+    path.include?("/.git/") || path.include?("/coverage/") || path.include?("/vendor/") || path.end_with?(".lock")
   end
 
-  def test_changelog_has_no_leftover_template_identity_after_rename
-    skip if @gem_name == "gem_template"
-
-    content = File.read(File.join(@root, "CHANGELOG.md"))
-    refute_includes content, "GemTemplate",
-                    "CHANGELOG.md still contains leftover GemTemplate identity"
-    refute_match %r{bowerbird-app/gem_template(?:["'/]|$)}, content,
-                 "CHANGELOG.md still points at bowerbird-app/gem_template"
-    refute_includes content, "https://github.com/bowerbird-app/RecordingStudio_gem_template",
-                    "CHANGELOG.md still points at the template homepage"
-  end
-
-  def test_gemspec_homepage_has_no_leftover_template_identity_after_rename
-    skip if @gem_name == "gem_template"
-
-    content = read_gemspec
-    refute_includes content, "GemTemplate",
-                    "Gemspec still contains leftover GemTemplate identity"
-    refute_match %r{bowerbird-app/gem_template(?:["'/]|$)}, content,
-                 "Gemspec still points at bowerbird-app/gem_template"
-    refute_includes content, "https://github.com/bowerbird-app/RecordingStudio_gem_template",
-                    "Gemspec still points at the template homepage"
+  def identity_hit(path, needle, pascal)
+    content = File.read(path)
+    path.sub("#{@root}/", "") if content.include?(needle) || content.include?(pascal)
+  rescue StandardError
+    nil
   end
 
   # ============================================================

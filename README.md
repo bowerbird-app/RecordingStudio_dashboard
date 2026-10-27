@@ -1,173 +1,162 @@
-# GemTemplate
+# Recording Studio Dashboard
 
-Internal template for building Rails engine addons on top of Recording Studio 4.x.
+Recording Studio Dashboard composes dashboards for Recording Studio applications. A host registers dashboards, rows, and widgets in Ruby. The gem places each widget on a 12-column grid. The widget renders everything inside its area.
 
-## What's Included
+The dummy app demonstrates the framework with generic studio widgets. Featured In can register its own widgets the same way. This gem does not depend on press kits, messages, or any other domain gem.
 
-- **Recording Studio** 4.x gem pinned and configured
-- **Devise** authentication with a pre-seeded admin user
-- **Workspace**, **Folder**, and **Page** recordables seeded into the dummy host app
-- **FlatPack** UI component library for all views
-- **Dummy app** (`test/dummy/`) with a FlatPack sign-in screen, a home page on Recording Studio's default layout, mounted Recording Studio routes, and FlatPack's built-in rounded theme
+## Hierarchy
 
-Authenticated dummy pages use Recording Studio's shared default layout (`RecordingStudio::UsesDefaultLayout`) plus FlatPack CSS and JS. Devise keeps its own sign-in layout. Dummy `/docs/*` pages stay in the dummy app as a host-app sandbox; they are not the product README.
-
-## Quick Start
-
-### Cursor Cloud Agent (Recommended)
-
-A Cloud Agent boots this repo into a ready-to-use dev environment with no manual steps. The setup lives in `.cursor/`:
-
-- `install.sh` provisions Ruby (pinned by `.ruby-version`), PostgreSQL 16, all gems, the seeded dummy database, and compiled CSS at build time, then fetches Recording Studio skills.
-- `start.sh` starts PostgreSQL on every boot.
-- `environment.json` runs the `rails-server` and `tailwind-watch` terminals and exposes port 3000.
-
-Open port 3000 and sign in at `/users/sign_in`. No environment variables are required — the dummy app's `database.yml` defaults match the provisioned PostgreSQL cluster.
-
-### GitHub Codespaces
-
-1. Click **Code** → **Codespaces** → **Create codespace**
-2. Wait for setup to complete
-3. Run:
-   ```bash
-   cd test/dummy
-   bin/rails db:setup
-   bin/dev
-   ```
-4. Open port 3000 — you'll land on the dummy app home page and can sign in at `/users/sign_in`
-
-The dummy app is intended as a host-app validation surface for authentication, FlatPack rendering, Tailwind source scanning, and Recording Studio route wiring.
-
-Dummy credentials (`test/dummy/config/credentials.yml.enc`) are encrypted with the shared RecordingStudio_* development master key. Set `RAILS_MASTER_KEY` or put that key in `test/dummy/config/master.key` (gitignored). Keep the encrypted file; do not generate a per-repo dummy key.
-
-### Login Credentials
-
-| Field    | Value             |
-|----------|-------------------|
-| Email    | admin@admin.com   |
-| Password | Password          |
-
-The login form is prefilled with these credentials for fast access.
-
-### Useful Routes
-
-- `/` — dummy app home page
-- `/users/sign_in` — Devise sign-in page
-- `/recording_studio` — redirect to `/` while the mounted Recording Studio engine remains data/API-focused
-- `/docs/install`, `/docs/config`, `/docs/recordable_types`, `/docs/recordings_tree`, `/docs/gem_views`, `/docs/methods` — dummy-only starter pages
-
-The home page in `test/dummy/app/views/home/index.html.erb` is a starting point for a minimal demo of the gem's primary behavior. Keep deeper explanations on the dummy docs pages, not in this README.
-
-## Architecture
-
-### Root Recording Pattern
-
-This template follows Recording Studio's root recording pattern:
-
-- **Workspace** is the top-level recordable
-- **Folder** and **Page** demonstrate nested recordables under the workspace root
-- Each configured recordable declares `recording_studio_recordable(...)`; strict declaration validation stays enabled
-- A root `RecordingStudio::Recording` wraps the Workspace
-- `Current.actor` is set from `current_user` (Devise) in `ApplicationController`
-
-### Extending Recording Studio
-
-To add new recordable types:
-
-1. Create your model (e.g., `Page`, `Comment`)
-2. Register it in `config/initializers/recording_studio.rb`:
-   ```ruby
-   RecordingStudio.configure do |config|
-     config.recordable_types = ["Workspace", "YourNewType"]
-   end
-   ```
-3. Declare whether the model can be a root and which parents may contain it:
-   ```ruby
-   class YourNewType < ApplicationRecord
-     recording_studio_recordable label: "Your new type",
-                                 root: false,
-                                 allowed_parent_types: ["Workspace", "Folder"]
-   end
-   ```
-4. Validate declarations and create recordings under the root:
-   ```ruby
-   RecordingStudio.validate_recordable_declarations!
-   root_recording = RecordingStudio.root_recording_for(workspace)
-   root_recording.record(YourNewType) do |record|
-     record.title = "Example"
-   end
-   ```
-
-### Recordable Declarations
-
-Every configured ActiveRecord recordable type must declare its hierarchy rules. Declarations are required; they are not version-specific.
-
-- `Workspace` declares `root: true`
-- `Folder` and `Page` declare `root: false, allowed_parent_types: ["Workspace", "Folder"]`
-- `config.require_recordable_declarations = true` remains enabled in the dummy app initializer
-
-Useful console checks:
-
-```ruby
-RecordingStudio.validate_recordable_declarations!
-RecordingStudio.root_recordable_types
-RecordingStudio.allowed_parent_types_for("Page")
+```text
+Dashboard
+  ├── Header
+  ├── Row
+  │     ├── Widget
+  │     │     └── Widget-owned content
+  │     └── Widget
+  │           └── Widget-owned content
+  └── Row
+        └── Widget
+              ├── Content item
+              ├── Content item
+              └── Content item
 ```
 
-### Capabilities
+A widget is one dashboard unit. Cards, checklist steps, carousel slides, and metric figures inside that unit belong to the widget's component. The dashboard counts placements, not the items a widget draws.
 
-Capability mixins are opt-in. Installing this gem does not enable mixins on host types.
+## Register a dashboard
 
-The dummy Workspace enables Accessible because that addon is bundled:
-
-```ruby
-RecordingStudio.enable_capability(:accessible, on: Workspace)
-```
-
-The template also ships one example mixin that uses core 4.2.0's `include_for` factory:
+Definitions live in Ruby. They are not database records.
 
 ```ruby
-include RecordingStudio::Capabilities::Example.to(label: "dummy workspace")
+RecordingStudioDashboard.register(:home) do
+  header component: WelcomeComponent
+
+  row :press_center, title: "Your press center" do
+    widget :press_center_overview, span: 6
+    widget :getting_started, span: 6
+  end
+
+  row :activity, title: "Recent activity", action: { label: "View all", url: "/kits" } do
+    widget :recent_press_kits, span: 12, config: { limit: 10, display: :carousel }
+  end
+
+  row :stats, title: "Stats" do
+    widget :downloads, span: 6
+    widget :views, span: 6
+  end
+end
 ```
 
-`.to` wraps `RecordingStudio::Capabilities.include_for`. It does not add a fourth verb and it does not call `enable_capability` / `set_capability_options` itself. Folder and Page stay without the example mixin.
+`RecordingStudioDashboard.component(:home, context: context)` returns the dashboard component. Render it from a host view. The header component receives `context:`. Site logo, account menu, and top navigation stay in the host layout.
 
-Use core `RecordingStudio::Hooks` and `RecordingStudio::Services::BaseService`. Do not copy those classes into a new addon.
+Two different widget types can share a row. Each placement has a stable id. The id defaults to the widget type id, and a second placement of the same type sets its own id.
 
-### FlatPack UI Components
+## Register a widget
 
-All views use FlatPack ViewComponents. Available components include:
+Other gems and the host register widget types. The same type can appear on many dashboards.
 
-- `FlatPack::Button::Component` — Buttons (`:primary`, `:secondary`, `:ghost`)
-- `FlatPack::Card::Component` — Cards (`:default`, `:elevated`, `:outlined`)
-- `FlatPack::Alert::Component` — Alerts (`:success`, `:error`, `:warning`, `:info`)
-- `FlatPack::Badge::Component` — Status badges
-- `FlatPack::Table::Component` — Data tables
-- `FlatPack::TextInput::Component`, `EmailInput`, `PasswordInput` — Form inputs
-- `FlatPack::PageNav::Component` — Default-layout page navigation
-- `FlatPack::PageTitle::Component` — Page titles
+```ruby
+RecordingStudioDashboard.register_widget(
+  :recent_press_kits,
+  component: RecentKitsComponent,
+  default_span: 12,
+  supported_spans: [6, 12],
+  options: %i[limit display sort],
+  empty: :message,
+  empty_message: "No recent items yet"
+)
+```
 
-Use the live FlatPack demo app at [flatpack.bowerbird.io](https://flatpack.bowerbird.io/) as the approved UI reference for current shared patterns. Its component table is the fastest way to discover available FlatPack components before introducing new custom UI.
+A widget component may implement `self.prepare(context, config)`. It returns one `RecordingStudioDashboard::Preparation`.
 
-See the [FlatPack README](https://github.com/bowerbird-app/flatpack) for full documentation.
+```ruby
+def self.prepare(context, config)
+  items = context.recent_items(config)
+  return RecordingStudioDashboard::Preparation.empty if items.nil?
+  return RecordingStudioDashboard::Preparation.empty(message: "No recent items yet") if items.empty?
 
-## Tech Stack
+  RecordingStudioDashboard::Preparation.content(items)
+end
+```
 
-| Component       | Version |
-|-----------------|---------|
-| Ruby            | 3.3+    |
-| Rails           | 8.1+    |
-| PostgreSQL      | 16      |
-| TailwindCSS     | 4       |
+`prepare` runs once. The component then receives `context:`, `config:`, and `preparation:`. A missing `prepare` renders `Preparation.content(config)`. A raised error becomes `Preparation.error` for that placement and is written to the Rails log. Sibling widgets still render.
+
+`nil` stays empty. A metric that measured zero returns `Preparation.content(0)`.
+
+The widget chooses Flatpack components for its content. A collection can render `FlatPack::Grid` or `FlatPack::Carousel`. The dashboard does not register the cards inside that collection.
+
+## Visibility and empty states
+
+Permission runs before `prepare`. A false permission drops the placement and does not load its data. A `visible_if` symbol is sent to the context. A callable receives the context. A hidden placement takes no columns.
+
+Empty policies are `:hide`, `:message`, `:placeholder`, and `:custom`. `:hide` removes the placement. The other three keep the width and render Flatpack empty state, a skeleton, or `empty_state.component`.
+
+```ruby
+widget :getting_started, span: 6 do
+  visible_if :onboarding_incomplete?
+end
+```
+
+When every placement in a row is gone, the row drops, including its title and action. Set a row `empty:` policy when the heading should remain.
+
+```ruby
+row :vacant, title: "Needs content", empty: { policy: :message, message: "This section is waiting for content." } do
+  widget :recent_items, config: { source: "empty" }
+end
+```
+
+## Width after a widget leaves
+
+`collapse: :expand` is the default. Remaining widgets share the freed columns, up to 12. `collapse: :preserve` keeps each configured span. Spans that already sum to 12 stay as configured.
+
+```ruby
+row :overview, title: "Overview", collapse: :expand do
+  widget :profile, span: 6
+  widget :setup, span: 6
+end
+```
+
+If `setup` is hidden, `profile` renders at span 12.
+
+## Fixed, personalised, and user-created dashboards
+
+`:fixed` ignores stored overrides. No preference row is read.
+
+`:personalised` allows row order, widget order, hide, resize, and add. A `mandatory: true` placement ignores hide. `RecordingStudioDashboard::Preference` stores only the override keys that differ from the definition. `recording_studio_dashboard:migrations` creates `recording_studio_dashboard_preferences`.
+
+`:user_created` uses the same override flags. Build the definition with `definition_from_layout` when the layout is persisted data. The layout names registered widget ids. Pass the header component at render time. The dummy `StudioBoard` is a Recording with `root: false` and `allowed_parent_types: ["Workspace"]`. Fixed and personalised dashboards stay in code.
+
+## Dummy app
+
+`test/dummy` is a host. Sign in at `/users/sign_in` with `admin@admin.com` / `Password`.
+
+- `/` renders the fixed home dashboard.
+- `/dashboards/carousel` reuses the recent-items widget as a Flatpack carousel.
+- `/dashboards/expanded` hides the checklist, so the overview fills the row.
+- `/dashboards/empty` drops hidden rows and shows a row-level empty message.
+- `/dashboards/personalised` stores a hide override for the checklist.
+- `/dashboards/restricted` denies the metric permission before `prepare`.
+- `/studio_boards/:id` renders a user-created board from its layout.
+
+Open port 3000 after the Cloud Agent setup in `.cursor/`. Dummy credentials use the shared RecordingStudio development master key.
+
+## Tech stack
+
+| Component | Version |
+| --- | --- |
+| Ruby | 3.3+ |
+| Rails | 8.1+ |
+| PostgreSQL | 16 |
+| Tailwind CSS | 4 |
 | RecordingStudio | 4.x (`~> 4.2` in the gemspec; dummy GitHub tag `v4.7.0`) |
-| Accessible      | dummy GitHub tag `v0.18.0` |
-| Trashable       | dummy GitHub tag `v0.11.0` (`require: false`; query-only via Accessible) |
+| Accessible | dummy GitHub tag `v0.18.0` |
+| Trashable | dummy GitHub tag `v0.11.0` (`require: false`) |
 | Root Switchable | dummy GitHub tag `v0.9.0` |
-| FlatPack        | dummy GitHub tag `v0.1.196` |
-| Devise          | latest  |
+| Flatpack | dummy GitHub tag `v0.1.196` |
+| Devise | current dummy pin |
 
-The dummy Gemfile keeps `github:` sources so Bundler can fetch those gems. The gemspec still pins `recording_studio` to `~> 4.2` so copied addons declare the core dependency even when GitHub is the fetch source.
+Capability mixins stay opt-in. Installing this gem does not enable a mixin on host types. The dummy Workspace enables Accessible on its own. Use `RecordingStudio::Hooks` and `RecordingStudio::Services::BaseService` from core. This gem does not copy those classes.
 
 ## Documentation
 
-The original gem template documentation is preserved in `docs/gem_template/` as architectural reference material. Use it as background on the engine conventions; this README and the dummy app are the source of truth for the Recording Studio addon workflow.
+Architecture and the registration reference live in `docs/recording_studio_dashboard/ARCHITECTURE.md`.

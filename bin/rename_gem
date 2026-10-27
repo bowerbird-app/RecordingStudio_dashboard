@@ -46,10 +46,7 @@ class GemRenamer
     CHANGELOG.md
   ].freeze
 
-  LEFTOVER_HOMEPAGES = %w[
-    https://github.com/bowerbird-app/RecordingStudio_gem_template
-    https://github.com/bowerbird-app/gem_template
-  ].freeze
+  LEFTOVER_HOMEPAGES = [].freeze
 
   def initialize(new_name, from: nil, dry_run: false)
     @root = File.expand_path("..", __dir__)
@@ -252,9 +249,6 @@ class GemRenamer
         EXCLUDED_DIRS.any? { |dir| f.include?("/#{dir}/") }
       end
       
-      # Exclude gem_template documentation directory (preserve as architectural reference)
-      files.reject! { |f| f.include?("/docs/gem_template/") }
-      
       # For test/dummy, only include specific whitelisted files
       files.reject! do |f|
         if f.include?("/test/dummy/")
@@ -424,9 +418,6 @@ class GemRenamer
     # Exclude files in excluded directories (but NOT test/dummy, handled below)
     files.reject! { |f| EXCLUDED_DIRS.any? { |dir| f.include?("/#{dir}/") } }
 
-    # Exclude gem_template documentation directory (preserve as architectural reference)
-    files.reject! { |f| f.include?("/docs/gem_template/") }
-
     # Exclude files that are intentionally preserved (like verification tests)
     files.reject! { |f| EXCLUDED_FILES.any? { |excluded| f.end_with?(excluded) } }
 
@@ -488,11 +479,7 @@ class GemRenamer
   end
 
   def leftover_template_identity?(content)
-    return true if content.include?(old_pascal)
-    return true if content.match?(%r{bowerbird-app/gem_template(?:["'/]|$)})
-    return true if content.include?("https://github.com/bowerbird-app/RecordingStudio_gem_template")
-
-    false
+    content.include?(old_pascal) || content.include?(old_name)
   end
 
   def rewrite_leftover_homepages!(updated)

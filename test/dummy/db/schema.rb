@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_12_044328) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_120100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -73,6 +73,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_044328) do
     t.index ["depends_on_recording_id"], name: "index_recording_studio_accesses_on_depends_on_recording_id"
   end
 
+  create_table "recording_studio_dashboard_preferences", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "dashboard_key", null: false
+    t.string "actor_type", null: false
+    t.uuid "actor_id", null: false
+    t.jsonb "overrides", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dashboard_key", "actor_type", "actor_id"], name: "idx_rs_dashboard_prefs_on_owner", unique: true
+  end
+
   create_table "recording_studio_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "action", null: false
     t.uuid "actor_id"
@@ -129,6 +139,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_12_044328) do
     t.index ["actor_type", "actor_id", "device_key", "scope_key"], name: "idx_rs_root_switchable_actor_device_scope", unique: true, where: "(actor_id IS NOT NULL)"
     t.index ["device_key", "scope_key"], name: "idx_rs_root_switchable_anonymous_device_scope", unique: true, where: "(actor_id IS NULL)"
     t.index ["root_recording_id"], name: "idx_rs_root_switchable_root_recording"
+  end
+
+  create_table "studio_boards", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "layout", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
