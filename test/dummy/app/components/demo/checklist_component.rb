@@ -16,10 +16,14 @@ module Demo
 
     def call
       render FlatPack::Card::Component.new(border: :strong, shadow: :none) do |card|
-        card.header { render FlatPack::PageTitle::Component.new(title: "Getting started", variant: :h3, class: "mb-0 pb-0") }
         card.body do
-          tag.ul(class: "space-y-3 text-sm leading-6") do
-            safe_join(@preparation.data.map { |step| tag.li(step, data: { checklist_step: step }) })
+          tag.div(class: "space-y-2") do
+            safe_join([
+              tag.h3("Getting started", class: "text-lg font-semibold leading-tight"),
+              tag.ul(class: "space-y-3 text-sm leading-6") do
+                safe_join(@preparation.data.map { |step| tag.li(step, data: { checklist_step: step }) })
+              end
+            ])
           end
         end
       end

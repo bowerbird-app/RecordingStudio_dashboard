@@ -29,6 +29,10 @@ class DashboardTest < ActionDispatch::IntegrationTest
     refute_includes response.body, "One widget owns every card inside it."
     assert_select "[data-dashboard-row=studio] .fp-section-title.mb-0"
     assert_select "[data-dashboard-row=studio].gap-3"
+    assert_select "[data-dashboard-placement=overview] .border-b", count: 0
+    assert_select "[data-dashboard-placement=checklist] .border-b", count: 0
+    assert_select "[data-dashboard-placement=recent_items] .border-b", count: 0
+    assert_select "[data-dashboard-placement=downloads] .border-b", count: 0
   end
 
   test "carousel reuses the collection widget with isolated config" do

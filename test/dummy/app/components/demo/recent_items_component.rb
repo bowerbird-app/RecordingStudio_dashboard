@@ -35,8 +35,14 @@ module Demo
 
     def card(item)
       render FlatPack::Card::Component.new do |card|
-        card.header { render FlatPack::PageTitle::Component.new(title: item.fetch(:title), variant: :h3, class: "mb-0 pb-0") }
-        card.body { tag.p(item.fetch(:detail), class: "text-sm leading-6", data: { collection_item: item.fetch(:title) }) }
+        card.body do
+          tag.div(class: "space-y-2") do
+            safe_join([
+              tag.h3(item.fetch(:title), class: "text-lg font-semibold leading-tight"),
+              tag.p(item.fetch(:detail), class: "text-sm leading-6", data: { collection_item: item.fetch(:title) })
+            ])
+          end
+        end
       end
     end
 

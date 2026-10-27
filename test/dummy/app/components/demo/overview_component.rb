@@ -14,8 +14,14 @@ module Demo
 
     def call
       render FlatPack::Card::Component.new do |card|
-        card.header { render FlatPack::PageTitle::Component.new(title: "Studio overview", variant: :h3, class: "mb-0 pb-0") }
-        card.body { tag.p(@preparation.data.fetch(:summary), class: "text-sm leading-6") }
+        card.body do
+          tag.div(class: "space-y-2") do
+            safe_join([
+              tag.h3("Studio overview", class: "text-lg font-semibold leading-tight"),
+              tag.p(@preparation.data.fetch(:summary), class: "text-sm leading-6")
+            ])
+          end
+        end
       end
     end
   end
