@@ -21,7 +21,7 @@ module RecordingStudioDashboard
     def heading
       return if @row.title.blank? && @row.action.nil?
 
-      tag.div(class: "flex items-end justify-between gap-4") do
+      tag.div(class: "fp-on-backdrop flex items-end justify-between gap-4") do
         safe_join([title, action_link].compact)
       end
     end
@@ -29,13 +29,20 @@ module RecordingStudioDashboard
     def title
       return if @row.title.blank?
 
-      render(FlatPack::SectionTitle::Component.new(title: @row.title, spacing: :none, class: "mb-0 pb-0"))
+      render(FlatPack::SectionTitle::Component.new(title: @row.title, spacing: :none,
+                                                   class: "fp-on-backdrop mb-0 pb-0"))
     end
 
     def action_link
       return if @row.action.nil?
 
-      render(FlatPack::Button::Component.new(text: @row.action.label, href: @row.action.url, style: :ghost, size: :sm))
+      render(FlatPack::Button::Component.new(
+               text: @row.action.label,
+               href: @row.action.url,
+               style: :ghost,
+               size: :sm,
+               class: "fp-on-backdrop"
+             ))
     end
 
     def body

@@ -21,7 +21,9 @@ module RecordingStudioDashboard
     def header
       return if @layout.header.nil?
 
-      render(@layout.header.component.new(context: @context))
+      tag.div(class: "fp-on-backdrop") do
+        render(@layout.header.component.new(context: @context))
+      end
     end
 
     def rows

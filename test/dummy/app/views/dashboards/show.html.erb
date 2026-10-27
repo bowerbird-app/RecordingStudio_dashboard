@@ -1,6 +1,6 @@
 <% dummy_page_nav(title: "Studio", back_url: root_path) %>
 
-<div class="mb-6 flex flex-wrap gap-2">
+<div class="fp-on-backdrop mb-6 flex flex-wrap gap-2">
   <%= render FlatPack::Button::Component.new(text: "Home", href: root_path, style: :ghost, size: :sm) %>
   <%= render FlatPack::Button::Component.new(text: "Carousel", href: dashboard_path("carousel"), style: :ghost, size: :sm) %>
   <%= render FlatPack::Button::Component.new(text: "Expanded", href: dashboard_path("expanded"), style: :ghost, size: :sm) %>

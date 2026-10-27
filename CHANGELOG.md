@@ -13,6 +13,7 @@
 ### Changed
 
 - The gem name is `recording_studio_dashboard` at version `0.1.0`.
-- Runtime dependencies are `rails`, `recording_studio` `~> 6.2`, and `flat_pack` `>= 0.1.315`, `< 0.2`.
+- Runtime dependencies are `rails`, `recording_studio` `~> 6.2`, and `flat_pack` `>= 0.1.327`, `< 0.2`.
 - The dummy app uses Recording Studio `v6.2.0` and fills the default layout background image slot.
-- Development and dummy locks use Flatpack `v0.1.315` so `view_component` is `4.20.0`. `crass` is `1.0.8` and `net-ssh` is `7.3.8`.
+- Development and dummy locks use Flatpack `v0.1.327` so `view_component` is `4.20.0`. `crass` is `1.0.8` and `net-ssh` is `7.3.8`.
+- Dashboard headers, row headings, section titles, and row actions use `.fp-on-backdrop`. Page text and ghost actions follow a layout photo. The widget grid does not, so cards keep their own text. Reload Flatpack CSS. Do not rebuild Tailwind for this class.

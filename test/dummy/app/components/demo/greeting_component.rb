@@ -7,7 +7,12 @@ module Demo
     end
 
     def call
-      render FlatPack::PageTitle::Component.new(title: greeting, subtitle: "Your studio dashboard", variant: :h1)
+      render FlatPack::PageTitle::Component.new(
+        title: greeting,
+        subtitle: "Your studio dashboard",
+        variant: :h1,
+        class: "fp-on-backdrop"
+      )
     end
 
     private

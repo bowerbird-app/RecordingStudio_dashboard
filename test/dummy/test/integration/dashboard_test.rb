@@ -27,13 +27,16 @@ class DashboardTest < ActionDispatch::IntegrationTest
     refute_includes response.body, "Radio session"
     refute_includes response.body, "Two different widgets share this row."
     refute_includes response.body, "One widget owns every card inside it."
-    assert_select "[data-dashboard-row=studio] .fp-section-title.mb-0"
+    assert_select "[data-dashboard-row=studio] .fp-section-title.fp-on-backdrop.mb-0"
+    assert_select "[data-dashboard-row=activity] .fp-on-backdrop", text: /View all/
     assert_select "[data-dashboard-row=studio].gap-3"
     assert_select "[data-dashboard-placement=overview] .border-b", count: 0
     assert_select "[data-dashboard-placement=checklist] .border-b", count: 0
     assert_select "[data-dashboard-placement=recent_items] .border-b", count: 0
     assert_select "[data-dashboard-placement=downloads] .border-b", count: 0
+    assert_select ".fp-card.fp-on-backdrop", count: 0
     assert_background_image
+    assert_backdrop_page_text
   end
 
   test "carousel reuses the collection widget with isolated config" do
@@ -45,6 +48,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Carousel"
     refute_includes response.body, "configured as a carousel."
     assert_select "[data-dashboard-placement=carousel_views]", text: /0/
+    assert_backdrop_page_text
   end
 
   test "a hidden checklist expands the overview" do
@@ -54,6 +58,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard-placement=overview][data-dashboard-span=12]"
     assert_select "[data-dashboard-placement=checklist]", count: 0
     refute_includes response.body, "Getting started"
+    assert_backdrop_page_text
   end
 
   test "empty policies hide rows and keep an explicit section message" do
@@ -65,6 +70,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Needs content"
     assert_includes response.body, "No recent items yet"
     assert_select "[data-dashboard-placement=empty_items][data-dashboard-state=empty]"
+    assert_backdrop_page_text
   end
 
   test "restricted metrics are not loaded" do
@@ -75,6 +81,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard-placement=downloads]", count: 0
     refute_includes response.body, "loaded without permission"
     refute_includes response.body, "This widget could not be displayed."
+    assert_backdrop_page_text
   end
 
   test "personalised mode stores a hide override and expands the mandatory widget" do
@@ -90,6 +97,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     )
     assert_equal ["checklist"], stored.overrides["hidden_placements"]
     refute stored.overrides.key?("rows")
+    assert_backdrop_page_text
   end
 
   test "a saved board recording renders through the same composition" do
@@ -103,9 +111,22 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Saves"
     refute_includes response.body, "Radio session"
     assert_background_image
+    assert_backdrop_page_text(tabs: false)
   end
 
   private
+
+  def assert_backdrop_page_text(tabs: true)
+    assert_select "[data-dashboard] > .fp-on-backdrop h1"
+    assert_select "[data-dashboard] .fp-on-backdrop h1"
+    assert_select ".fp-on-backdrop [data-dashboard-placement]", count: 0
+    assert_select "[data-dashboard-row] .fp-section-title.fp-on-backdrop"
+    assert_select "nav.flat-pack-page-nav.fp-on-backdrop"
+    assert_select ".fp-on-backdrop", text: /Sign out/
+    return unless tabs
+
+    assert_select ".fp-on-backdrop.mb-6 a", text: "Home"
+  end
 
   def assert_background_image
     assert_select "[data-recording-studio-default-layout=true] [data-flat-pack-layout-background=true]", count: 1

@@ -15,7 +15,24 @@ class RecordingStudioDashboardTest < Minitest::Test
     gemspec = File.read(File.expand_path("../recording_studio_dashboard.gemspec", __dir__))
 
     assert_includes gemspec, 'spec.add_dependency "recording_studio", "~> 6.2"'
-    assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.315", "< 0.2"'
+    assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.327", "< 0.2"'
+  end
+
+  def test_dashboard_shell_opts_page_text_into_the_backdrop
+    dashboard = File.read(File.expand_path("../app/components/recording_studio_dashboard/dashboard_component.rb",
+                                           __dir__))
+    row = File.read(File.expand_path("../app/components/recording_studio_dashboard/row_component.rb", __dir__))
+    greeting = File.read(File.expand_path("dummy/app/components/demo/greeting_component.rb", __dir__))
+    helper = File.read(File.expand_path("dummy/app/helpers/application_helper.rb", __dir__))
+    dashboard_view = File.read(File.expand_path("dummy/app/views/dashboards/show.html.erb", __dir__))
+
+    assert_includes dashboard, "fp-on-backdrop"
+    assert_includes row, "fp-on-backdrop"
+    assert_includes greeting, 'class: "fp-on-backdrop"'
+    assert_includes helper, 'class: "fp-on-backdrop"'
+    assert_includes dashboard_view, "fp-on-backdrop"
+    refute_includes File.read(File.expand_path("dummy/app/components/demo/overview_component.rb", __dir__)),
+                    "fp-on-backdrop"
   end
 
   def test_gemspec_excludes_cursor_config
@@ -62,7 +79,8 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes gemfile, 'tag: "v0.9.0"'
     refute_includes gemfile, 'tag: "v0.5.0"'
     refute_includes gemfile, 'tag: "v0.5.1"'
-    assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.315"'
+    assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.327"'
+    refute_includes gemfile, 'tag: "v0.1.315"'
     refute_includes gemfile, "recording_studio/v3.0.0"
     refute_includes gemfile, 'tag: "v4.4.0"'
     refute_includes gemfile, 'tag: "v4.3.0"'
@@ -211,7 +229,8 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes readme, "dummy GitHub tag `v4.7.0`"
     refute_includes readme, "dummy GitHub tag `v4.6.0`"
     refute_includes readme, "dummy GitHub tag `v4.5.0`"
-    assert_includes readme, "dummy GitHub tag `v0.1.315`"
+    assert_includes readme, "dummy GitHub tag `v0.1.327`"
+    refute_includes readme, "dummy GitHub tag `v0.1.315`"
     assert_includes readme, "dummy GitHub tag `v0.23.0`"
     assert_includes readme, "dummy GitHub tag `v0.12.0`"
     refute_includes readme, "dummy GitHub tag `v0.18.0`"
