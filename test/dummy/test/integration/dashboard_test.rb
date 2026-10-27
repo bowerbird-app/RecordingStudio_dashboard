@@ -33,6 +33,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard-placement=checklist] .border-b", count: 0
     assert_select "[data-dashboard-placement=recent_items] .border-b", count: 0
     assert_select "[data-dashboard-placement=downloads] .border-b", count: 0
+    assert_background_image
   end
 
   test "carousel reuses the collection widget with isolated config" do
@@ -101,5 +102,14 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard-placement=saved_items] [data-collection-item]", count: 2
     assert_includes response.body, "Saves"
     refute_includes response.body, "Radio session"
+    assert_background_image
+  end
+
+  private
+
+  def assert_background_image
+    assert_select "[data-recording-studio-default-layout=true] [data-flat-pack-layout-background=true]", count: 1
+    assert_select ".fp-backdrop-media img[alt=''][loading='lazy'][src*='dashboard-backdrop']", count: 1
+    assert_select ".fp-backdrop-tint", count: 1
   end
 end

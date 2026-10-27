@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Recording Studio v4.7.0 and Root Switchable v0.9.0 still call Flatpack
-# with the Card and PageNav keywords removed in Flatpack 0.1.315.
+# Older Flatpack callers still pass Card and PageNav keywords removed in Flatpack 0.1.315.
+# Recording Studio 6.2 stores page nav on FlatPack::PageNav::Spec, which accepts the new keys.
 module FlatPackCardStyleCompat
   STYLES = {
     default: {},
