@@ -14,3 +14,4 @@
 
 - The gem name is `recording_studio_dashboard` at version `0.1.0`.
 - Runtime dependencies are `rails`, `recording_studio` `~> 4.2`, and `flat_pack` `~> 0.1.196`.
+- Development and dummy locks use Flatpack `v0.1.315` so `view_component` is `4.20.0`. `crass` is `1.0.8` and `net-ssh` is `7.3.8`.

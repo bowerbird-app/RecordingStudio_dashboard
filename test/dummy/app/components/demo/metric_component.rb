@@ -16,7 +16,7 @@ module Demo
     end
 
     def call
-      render FlatPack::Card::Component.new(style: :elevated) do |card|
+      render FlatPack::Card::Component.new(shadow: :md) do |card|
         card.header { render FlatPack::PageTitle::Component.new(title: @preparation.data.fetch(:label), variant: :h3, class: "mb-0 pb-0") }
         card.body { tag.p(@preparation.data.fetch(:value).to_s, class: "text-4xl font-bold fp-tabular-nums") }
       end

@@ -15,7 +15,7 @@ module Demo
     end
 
     def call
-      render FlatPack::Card::Component.new(style: :outlined) do |card|
+      render FlatPack::Card::Component.new(border: :strong, shadow: :none) do |card|
         card.header { render FlatPack::PageTitle::Component.new(title: "Getting started", variant: :h3, class: "mb-0 pb-0") }
         card.body do
           tag.ul(class: "space-y-3 text-sm leading-6") do

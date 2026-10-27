@@ -152,7 +152,7 @@ Open port 3000 after the Cloud Agent setup in `.cursor/`. Dummy credentials use 
 | Accessible | dummy GitHub tag `v0.18.0` |
 | Trashable | dummy GitHub tag `v0.11.0` (`require: false`) |
 | Root Switchable | dummy GitHub tag `v0.9.0` |
-| Flatpack | dummy GitHub tag `v0.1.196` |
+| Flatpack | dummy GitHub tag `v0.1.315` |
 | Devise | current dummy pin |
 
 Capability mixins stay opt-in. Installing this gem does not enable a mixin on host types. The dummy Workspace enables Accessible on its own. Use `RecordingStudio::Hooks` and `RecordingStudio::Services::BaseService` from core. This gem does not copy those classes.

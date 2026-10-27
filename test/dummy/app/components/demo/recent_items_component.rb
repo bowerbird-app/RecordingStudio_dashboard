@@ -34,7 +34,7 @@ module Demo
     private
 
     def card(item)
-      render FlatPack::Card::Component.new(style: :default) do |card|
+      render FlatPack::Card::Component.new do |card|
         card.header { render FlatPack::PageTitle::Component.new(title: item.fetch(:title), variant: :h3, class: "mb-0 pb-0") }
         card.body { tag.p(item.fetch(:detail), class: "text-sm leading-6", data: { collection_item: item.fetch(:title) }) }
       end
