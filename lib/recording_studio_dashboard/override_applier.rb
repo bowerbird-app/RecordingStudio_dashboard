@@ -14,9 +14,10 @@ module RecordingStudioDashboard
     end
 
     def call
-      rows = @definition.rows.map { |row| apply_row(row) }
-      rows = reorder(rows, @overrides.row_order) if @policy.reorder_rows
-      append_added(rows)
+      rows = append_added(@definition.rows).map { |row| apply_row(row) }
+      return rows unless @policy.reorder_rows
+
+      reorder(rows, @overrides.row_order)
     end
 
     private

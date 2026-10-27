@@ -24,10 +24,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Prefer git copies over hardlinks
+        run: .github/scripts/prefer-git-copies.sh
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Prepare RuboCop cache
@@ -71,6 +74,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Prefer git copies over hardlinks
+        run: .github/scripts/prefer-git-copies.sh
+
       - name: Set up Ruby ${{ matrix.ruby-version }}
         uses: ruby/setup-ruby@v1
         with:
@@ -79,10 +85,13 @@ jobs:
           cache-version: ${{ hashFiles('test/dummy/Gemfile.lock') }}
 
       - name: Install dummy app dependencies
-        run: bundle install
         working-directory: test/dummy
-        env:
-          BUNDLE_GITHUB__COM: x-access-token:${{ secrets.BOWERBIRD_ORG_CI_TOKEN }}
+        run: |
+          for attempt in 1 2 3; do
+            bundle install --jobs 1 && exit 0
+            rm -rf "${BUNDLE_PATH:-vendor/bundle}/ruby/"*/bundler/gems "${HOME}/.bundle/cache/git"
+          done
+          exit 1
 
       - name: Build dummy app Tailwind assets
         run: bundle exec rails tailwindcss:build

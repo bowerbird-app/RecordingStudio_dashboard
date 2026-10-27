@@ -27,7 +27,7 @@ Flatpack draws cards, grids, carousels, empty states, and alerts. This gem decid
 2. Read the trusted context and, when the policy stores preferences, the actor's override row.
 3. Apply permitted overrides. Mandatory placements stay when hide is requested.
 4. Skip a row whose `visible_if` is false. Children of that row are not prepared.
-5. Skip a placement that fails `permission` or `visible_if`. `prepare` does not run.
+5. Skip a placement that fails `permission`, the widget type `visible_if`, or the placement `visible_if`. `prepare` does not run.
 6. Call `prepare` once for each remaining placement.
 7. Drop empty placements whose policy is `:hide`.
 8. Drop a row that has no placements left and whose empty policy is `:hide`.
@@ -128,7 +128,7 @@ A custom `Policy` may turn individual flags on. `Policy.resolve` accepts `:fixed
 
 ## Widget contract
 
-`register_widget` accepts `component`, `title`, `description`, `default_span`, `supported_spans`, `options`, `permission`, `empty`, `empty_message`, and `empty_component`.
+`register_widget` accepts `component`, `title`, `description`, `default_span`, `supported_spans`, `options`, `permission`, `visible_if`, `empty`, `empty_message`, and `empty_component`. A type `visible_if` applies to every placement of that widget.
 
 Unknown `config` keys raise `ArgumentError` at registration time. A span outside `supported_spans` raises too.
 

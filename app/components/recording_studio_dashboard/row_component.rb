@@ -19,11 +19,32 @@ module RecordingStudioDashboard
     private
 
     def heading
-      return if @row.title.blank? && @row.description.blank? && @row.action.nil?
+      return description_text if bare_description?
+      return if heading_empty?
 
       tag.div(class: "flex items-end justify-between gap-4") do
-        safe_join([title, action_link].compact)
+        safe_join([heading_copy, action_link].compact)
       end
+    end
+
+    def bare_description?
+      @row.title.blank? && @row.action.nil? && @row.description.present?
+    end
+
+    def heading_empty?
+      @row.title.blank? && @row.description.blank? && @row.action.nil?
+    end
+
+    def heading_copy
+      return title if @row.title.present?
+
+      description_text
+    end
+
+    def description_text
+      return if @row.description.blank?
+
+      tag.p(@row.description)
     end
 
     def title

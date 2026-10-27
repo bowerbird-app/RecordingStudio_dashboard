@@ -216,6 +216,44 @@ class ComposerTest < Minitest::Test
     assert_raises(KeyError) { RecordingStudioDashboard.registry.dashboard("board-1") }
   end
 
+  def test_widget_type_visible_if_skips_prepare
+    RecordingStudioDashboard.reset!
+    RecordingStudioDashboard.register_widget(
+      :metric, component: Probe, default_span: 12, options: %i[name value], visible_if: :show_setup?
+    )
+    definition = RecordingStudioDashboard.register(:gated) do
+      row :stats do
+        widget :metric, id: :downloads, config: { name: "downloads", value: 4 }
+      end
+    end
+
+    @context = Context.new(show_setup: false)
+    assert_empty compose(definition).rows
+    assert_empty @context.loaded
+
+    @context = Context.new(show_setup: true)
+    assert_equal [:downloads], compose(definition).rows.first.widgets.map(&:id)
+    assert_equal ["downloads"], @context.loaded
+  end
+
+  def test_added_widget_uses_the_row_placement_order
+    definition = RecordingStudioDashboard.register(:arranged, policy: :personalised) do
+      row :stats do
+        widget :metric, id: :downloads, span: 6, config: { name: "downloads", value: 4 }
+        widget :metric, id: :views, span: 6, config: { name: "views", value: 9 }
+      end
+    end
+    overrides = RecordingStudioDashboard::Overrides.parse(
+      "placement_order" => { "stats" => %w[extra views downloads] },
+      "added" => [{
+        "id" => "extra", "widget" => "metric", "row" => "stats", "span" => 4,
+        "config" => { "name" => "extra", "value" => 1 }
+      }]
+    )
+
+    assert_equal %i[extra views downloads], compose(definition, overrides).rows.first.widgets.map(&:id)
+  end
+
   def test_overrides_store_only_the_delta
     overrides = RecordingStudioDashboard::Overrides.parse("hidden_placements" => ["setup"])
 

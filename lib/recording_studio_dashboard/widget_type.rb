@@ -2,7 +2,8 @@
 
 module RecordingStudioDashboard
   WidgetType = Data.define(
-    :id, :component, :title, :description, :default_span, :supported_spans, :options, :permission, :empty_state
+    :id, :component, :title, :description, :default_span, :supported_spans, :options, :permission,
+    :empty_state, :visible_if
   ) do
     def self.build(id, component:, **attrs)
       new(**attributes(id, component, attrs))
@@ -10,13 +11,12 @@ module RecordingStudioDashboard
 
     def self.attributes(id, component, attrs)
       {
-        id: id.to_sym,
-        component: required_component(id, component),
+        id: id.to_sym, component: required_component(id, component),
         title: attrs[:title], description: attrs[:description],
         default_span: Integer(attrs.fetch(:default_span, 12)),
         supported_spans: attrs.fetch(:supported_spans, 1..12),
         options: Array(attrs.fetch(:options, [])).map(&:to_sym),
-        permission: attrs[:permission],
+        permission: attrs[:permission], visible_if: attrs[:visible_if],
         empty_state: empty_from(attrs)
       }
     end

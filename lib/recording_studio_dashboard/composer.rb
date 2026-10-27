@@ -30,16 +30,26 @@ module RecordingStudioDashboard
 
     def lay_placement(placement)
       type = @registry.widget(placement.widget)
-      return nil unless permitted?(type)
-      return nil unless visible?(placement.visible_if)
+      return nil unless show_placement?(type, placement)
 
       preparation = prepare(type, placement)
-      empty_state = placement.empty_state
-      return nil if preparation.state == :empty && empty_state.policy == :hide
+      return nil if hidden_empty?(placement, preparation)
 
+      laid_widget(type, placement, preparation)
+    end
+
+    def show_placement?(type, placement)
+      permitted?(type) && visible?(type.visible_if) && visible?(placement.visible_if)
+    end
+
+    def hidden_empty?(placement, preparation)
+      preparation.state == :empty && placement.empty_state.policy == :hide
+    end
+
+    def laid_widget(type, placement, preparation)
       LaidWidget.new(
         id: placement.id, widget: type.id, span: placement.span, component: type.component,
-        config: placement.config, preparation: preparation, empty_state: empty_state
+        config: placement.config, preparation: preparation, empty_state: placement.empty_state
       )
     end
 
