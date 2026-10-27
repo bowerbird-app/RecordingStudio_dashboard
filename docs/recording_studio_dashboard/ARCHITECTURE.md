@@ -19,6 +19,8 @@ Dashboard
 
 Flatpack draws cards, grids, carousels, empty states, and alerts. This gem decides which placements remain and how wide they are.
 
+A row heading is the section title and an optional action. It does not render a subtitle. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid.
+
 ## Render order
 
 `Composer` follows this order.

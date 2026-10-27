@@ -25,6 +25,10 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard-placement=views]"
     assert_includes response.body, "Spring release"
     refute_includes response.body, "Radio session"
+    refute_includes response.body, "Two different widgets share this row."
+    refute_includes response.body, "One widget owns every card inside it."
+    assert_select "[data-dashboard-row=studio] .fp-section-title.mb-0"
+    assert_select "[data-dashboard-row=studio].gap-3"
   end
 
   test "carousel reuses the collection widget with isolated config" do
@@ -34,6 +38,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard=carousel] [data-dashboard-placement=recent_items]", count: 1
     assert_includes response.body, "Radio session"
     assert_includes response.body, "Carousel"
+    refute_includes response.body, "configured as a carousel."
     assert_select "[data-dashboard-placement=carousel_views]", text: /0/
   end
 

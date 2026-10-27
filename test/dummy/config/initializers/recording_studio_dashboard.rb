@@ -40,14 +40,14 @@ RecordingStudioDashboard.register_widget(
 RecordingStudioDashboard.register(:home) do
   header component: Demo::GreetingComponent
 
-  row :studio, title: "Your studio", description: "Two different widgets share this row." do
+  row :studio, title: "Your studio" do
     widget :overview, span: 6, mandatory: true
     widget :checklist, span: 6 do
       visible_if :onboarding_incomplete?
     end
   end
 
-  row :activity, title: "Recent activity", description: "One widget owns every card inside it.",
+  row :activity, title: "Recent activity",
       action: { label: "View all", url: "/dashboards/carousel" }, visible_if: :show_activity? do
     widget :recent_items, span: 12, config: { limit: 3, display: :grid }
   end
@@ -61,7 +61,7 @@ end
 RecordingStudioDashboard.register(:carousel) do
   header component: Demo::GreetingComponent
 
-  row :activity, title: "Recent activity", description: "The same widget type, configured as a carousel." do
+  row :activity, title: "Recent activity" do
     widget :recent_items, span: 12, config: { limit: 4, display: :carousel }
   end
 

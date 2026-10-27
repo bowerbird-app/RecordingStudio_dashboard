@@ -11,7 +11,7 @@ module RecordingStudioDashboard
     end
 
     def call
-      tag.section(class: "flex w-full flex-col gap-4", data: { dashboard_row: @row.id }) do
+      tag.section(class: "flex w-full flex-col gap-3", data: { dashboard_row: @row.id }) do
         safe_join([heading, body].compact)
       end
     end
@@ -19,38 +19,17 @@ module RecordingStudioDashboard
     private
 
     def heading
-      return description_text if bare_description?
-      return if heading_empty?
+      return if @row.title.blank? && @row.action.nil?
 
       tag.div(class: "flex items-end justify-between gap-4") do
-        safe_join([heading_copy, action_link].compact)
+        safe_join([title, action_link].compact)
       end
-    end
-
-    def bare_description?
-      @row.title.blank? && @row.action.nil? && @row.description.present?
-    end
-
-    def heading_empty?
-      @row.title.blank? && @row.description.blank? && @row.action.nil?
-    end
-
-    def heading_copy
-      return title if @row.title.present?
-
-      description_text
-    end
-
-    def description_text
-      return if @row.description.blank?
-
-      tag.p(@row.description)
     end
 
     def title
       return if @row.title.blank?
 
-      render(FlatPack::SectionTitle::Component.new(title: @row.title, subtitle: @row.description))
+      render(FlatPack::SectionTitle::Component.new(title: @row.title, spacing: :none, class: "mb-0 pb-0"))
     end
 
     def action_link
