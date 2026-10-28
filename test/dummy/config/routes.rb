@@ -25,5 +25,8 @@ Rails.application.routes.draw do
   get "docs/methods", to: "docs#methods", as: :docs_methods
 
   # Defines the root path route ("/")
-  root "home#index"
+  get "dashboards/:id", to: "dashboards#show", as: :dashboard
+  resources :studio_boards, only: :show
+
+  root "dashboards#show", defaults: { id: "home" }
 end

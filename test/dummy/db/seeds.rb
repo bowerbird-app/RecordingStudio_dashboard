@@ -40,6 +40,29 @@ begin
   folder_recording = find_or_record_child.call(folder, root_recording, root_recording)
 
   find_or_record_child.call(page, root_recording, folder_recording)
+
+  board = StudioBoard.find_or_create_by!(name: "My board") do |record|
+    record.layout = {
+      "rows" => [
+        {
+          "id" => "saved",
+          "title" => "Saved board",
+          "placements" => [
+            { "id" => "saved_downloads", "widget" => "metric", "span" => 6, "config" => { "label" => "Saves", "value" => 7 } },
+            { "id" => "saved_views", "widget" => "metric", "span" => 6, "config" => { "label" => "Board views", "value" => 2 } }
+          ]
+        },
+        {
+          "id" => "saved_activity",
+          "title" => "Saved items",
+          "placements" => [
+            { "id" => "saved_items", "widget" => "recent_items", "span" => 12, "config" => { "limit" => 2, "display" => "grid" } }
+          ]
+        }
+      ]
+    }
+  end
+  find_or_record_child.call(board, root_recording, root_recording)
 ensure
   Current.actor = previous_actor
 end

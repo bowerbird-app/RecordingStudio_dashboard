@@ -1,19 +1,22 @@
 module ApplicationHelper
   def dummy_page_nav(title:, back_url: nil, back_label: "Home")
-    recording_studio_page_nav(
-      title: title,
-      page_nav_back_url: back_url,
-      page_nav_back_label: back_label
-    )
+    # The default layout paints content_for(:title) as a second page heading.
+    # These screens already render their heading, so title is intentionally unused here.
+    # .fp-on-backdrop sets color and --surface-content-color for text on the photo.
+    # It does not retarget --button-default-text-color. That token is aliased on
+    # [data-theme], and the default fill stays the light surface. The nav stays
+    # outside the class so it does not inherit white text around those buttons.
+    flat_pack_page_nav(round: true, style: :default, back_href: back_url, back_tooltip: back_label)
+    recording_studio_background_image(asset_path("dashboard-backdrop.svg"))
 
     recording_studio_page_nav_right do
-      concat recording_studio_root_switch_dropdown(style: :ghost, size: :md)
+      concat recording_studio_root_switch_dropdown(style: :default, size: :md)
       concat render(
         FlatPack::Button::Component.new(
           text: "Sign out",
-          style: :ghost,
+          style: :default,
           size: :md,
-          url: main_app.destroy_user_session_path,
+          href: main_app.destroy_user_session_path,
           data: { turbo_method: :delete }
         )
       )

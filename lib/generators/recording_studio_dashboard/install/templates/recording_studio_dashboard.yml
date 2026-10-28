@@ -1,0 +1,3 @@
+# Unknown keys are ignored. Dashboard definitions belong in the initializer.
+development: {}
+production: {}

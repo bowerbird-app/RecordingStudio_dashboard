@@ -36,6 +36,15 @@ module Dummy
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
+    # Flatpack includes these helpers from an engine initializer. The isolated
+    # engine autoloads app/helpers as FlatPack, so app/helpers/flat_pack is not
+    # FlatPack::CopyHelper until the files are required explicitly.
+    config.before_initialize do
+      helpers = FlatPack::Engine.root.join("app/helpers/flat_pack")
+      Rails.autoloaders.each { |loader| loader.ignore(helpers.to_s) }
+      Dir[helpers.join("*.rb")].each { |file| require file }
+    end
+
     # Configure generators to use UUID primary keys
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
