@@ -29,8 +29,11 @@ class RecordingStudioDashboardTest < Minitest::Test
     assert_includes dashboard, "fp-on-backdrop"
     assert_includes row, "fp-on-backdrop"
     assert_includes greeting, 'class: "fp-on-backdrop"'
-    assert_includes helper, 'class: "fp-on-backdrop"'
-    assert_includes dashboard_view, "fp-on-backdrop"
+    assert_includes helper, "style: :default"
+    refute_includes helper, "style: :ghost"
+    refute_includes helper, 'class: "fp-on-backdrop"'
+    refute_includes dashboard_view, "fp-on-backdrop"
+    refute_includes dashboard_view, "Personalised"
     refute_includes File.read(File.expand_path("dummy/app/components/demo/overview_component.rb", __dir__)),
                     "fp-on-backdrop"
   end

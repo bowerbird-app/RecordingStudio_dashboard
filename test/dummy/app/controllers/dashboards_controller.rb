@@ -15,7 +15,6 @@ class DashboardsController < ApplicationController
     @definition_id = PAGES.fetch(page) { raise ActiveRecord::RecordNotFound }
     remember_personalisation(page)
     @context = Demo::DashboardContext.for(page, current_user)
-    @board = StudioBoard.find_by(name: "My board")
   end
 
   private

@@ -45,7 +45,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-dashboard=carousel] [data-dashboard-placement=recent_items]", count: 1
     assert_includes response.body, "Radio session"
-    assert_includes response.body, "Carousel"
+    assert_select "[data-dashboard=carousel] .flat-pack-carousel"
     refute_includes response.body, "configured as a carousel."
     assert_select "[data-dashboard-placement=carousel_views]", text: /0/
     assert_backdrop_page_text
@@ -111,21 +111,22 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Saves"
     refute_includes response.body, "Radio session"
     assert_background_image
-    assert_backdrop_page_text(tabs: false)
+    assert_backdrop_page_text
   end
 
   private
 
-  def assert_backdrop_page_text(tabs: true)
+  def assert_backdrop_page_text
     assert_select "[data-dashboard] > .fp-on-backdrop h1"
     assert_select "[data-dashboard] .fp-on-backdrop h1"
     assert_select ".fp-on-backdrop [data-dashboard-placement]", count: 0
     assert_select "[data-dashboard-row] .fp-section-title.fp-on-backdrop"
-    assert_select "nav.flat-pack-page-nav.fp-on-backdrop"
-    assert_select ".fp-on-backdrop", text: /Sign out/
-    return unless tabs
-
-    assert_select ".fp-on-backdrop.mb-6 a", text: "Home"
+    assert_select "nav.flat-pack-page-nav"
+    assert_select "nav.flat-pack-page-nav.fp-on-backdrop", count: 0
+    assert_select "nav.flat-pack-page-nav [data-fp-style=default]"
+    assert_select "a[data-turbo-method=delete][data-fp-style=default]", text: "Sign out"
+    assert_select ".fp-on-backdrop [data-fp-style=default]", count: 0
+    assert_select "a", text: "Personalised", count: 0
   end
 
   def assert_background_image
