@@ -49,7 +49,7 @@ end
 
 `RecordingStudioDashboard.component(:home, context: context)` returns the dashboard component. Render it from a host view. The header component receives `context:`. Site logo, account menu, and top navigation stay in the host layout.
 
-A row heading is the section title and an optional action. It does not render a subtitle. The action is a small Flatpack default button. Keep it outside `.fp-on-backdrop` so the filled pill keeps dark type.
+A row heading is the section title and an optional action. It does not render a subtitle. The action is a small Flatpack default button. Keep it outside `.fp-on-backdrop` so the filled pill keeps dark type. The dashboard stack uses `gap-12` between rows. The gap from a row title to its widgets stays small.
 
 Two different widget types can share a row. Each placement has a stable id. The id defaults to the widget type id, and a second placement of the same type sets its own id.
 

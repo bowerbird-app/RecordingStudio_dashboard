@@ -11,7 +11,7 @@ module RecordingStudioDashboard
     end
 
     def call
-      tag.div(class: "flex w-full flex-col gap-8", data: { dashboard: @layout.id }) do
+      tag.div(class: "flex w-full flex-col gap-12", data: { dashboard: @layout.id }) do
         safe_join([header, *rows].compact)
       end
     end

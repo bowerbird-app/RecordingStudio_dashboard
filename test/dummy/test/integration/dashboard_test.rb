@@ -18,7 +18,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_select "[data-dashboard=home]"
+    assert_select "[data-dashboard=home].gap-12"
     assert_select "[data-dashboard-row=studio] [data-dashboard-placement]", count: 2
     assert_select "[data-dashboard-placement=recent_items] [data-collection-item]", count: 3
     assert_select "[data-dashboard-placement=downloads]"
