@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased]
+
+### Removed
+
+- Dummy coverage reports and `test/dummy/install_page.html` from git.
+- Stale `UPDATE_SUMMARY.md`.
+- Template rename script, rename tests, and dummy `/docs` starter pages.
+
+### Changed
+
+- Dummy PostgreSQL fallback names are `recording_studio_dashboard_development` and `recording_studio_dashboard_test`.
+
 ## [0.1.0] - 2026-10-27
 
 ### Added
