@@ -39,7 +39,7 @@ module RecordingStudioDashboard
       render(FlatPack::Button::Component.new(
                text: @row.action.label,
                href: @row.action.url,
-               style: :ghost,
+               style: :default,
                size: :sm,
                class: "fp-on-backdrop"
              ))
