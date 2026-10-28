@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Dummy overview, checklist, metric, and recent-item widgets use Flatpack `SectionTitle` for card and carousel headings.
+
 ## [0.1.0] - 2026-10-27
 
 ### Added

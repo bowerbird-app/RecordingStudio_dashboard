@@ -47,7 +47,7 @@ row :studio, title: "Your studio" do
 end
 ```
 
-`OverviewComponent` renders one card. The dashboard only supplies the column span.
+`OverviewComponent` renders one card. The dashboard only supplies the column span. Card headings in the dummy widgets use Flatpack `SectionTitle` (`size: :md`, `spacing: :none`, `level: :h3`).
 
 ## Collection
 
