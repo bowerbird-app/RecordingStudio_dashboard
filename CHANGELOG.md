@@ -1,12 +1,16 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.1] - 2026-10-28
 
 ### Changed
 
 - Dummy overview, checklist, metric, and recent-item widgets use Flatpack `SectionTitle` for card and carousel headings.
 - Row heading actions use a Flatpack default button (`style: :default`, `size: :sm`) instead of ghost. The action stays outside `.fp-on-backdrop` so the filled pill keeps dark type. Hosts see this after they pin this revision. No Featured In change is required.
 - The dashboard column uses `gap-12` between the header and rows so sections sit farther apart. The gap inside a row stays `gap-3`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.1.1`. Reload the host. No Featured In code change.
 
 ## [0.1.0] - 2026-10-27
 
