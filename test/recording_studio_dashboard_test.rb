@@ -272,48 +272,14 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes view_source, 'title: "Demo"'
   end
 
-  def test_dummy_docs_pages_use_minimal_flatpack_documentation_components
-    docs_view_paths = Dir[File.expand_path("dummy/app/views/docs/*.html.erb", __dir__)].reject do |view_path|
-      File.basename(view_path).start_with?("_")
-    end
-    refute_empty docs_view_paths
-
-    docs_view_paths.each do |view_path|
-      view_source = File.read(view_path)
-
-      assert_includes view_source, "dummy_page_nav"
-      assert_includes view_source, "FlatPack::PageTitle::Component"
-      refute_includes view_source, "FlatPack::Card::Component"
-      refute_includes view_source, "FlatPack::Breadcrumb::Component"
-    end
-
-    methods_view = File.read(File.expand_path("dummy/app/views/docs/methods.html.erb", __dir__))
-    assert_includes methods_view, "FlatPack::SectionTitle::Component"
-    assert_includes methods_view, "FlatPack::CodeBlock::Component"
-
-    gem_views_view = File.read(File.expand_path("dummy/app/views/docs/gem_views.html.erb", __dir__))
-    assert_includes gem_views_view, "FlatPack::Table::Component"
-    refute_includes gem_views_view, "FlatPack::List::Component"
-
-    recordable_types_view = File.read(File.expand_path("dummy/app/views/docs/recordable_types.html.erb", __dir__))
-    assert_includes recordable_types_view, "FlatPack::List::Component"
-    refute_includes recordable_types_view, "v3 parent/root"
-
-    recordings_tree_view = File.read(File.expand_path("dummy/app/views/docs/recordings_tree.html.erb", __dir__))
-    assert_includes recordings_tree_view, "FlatPack::Tree::Component"
-    refute_includes recordings_tree_view, "Current structure"
-    refute_includes recordings_tree_view, "This tree is generated from RecordingStudio::Recording records"
-  end
-
-  def test_dummy_recordings_tree_view_omits_structure_section_copy
-    recordings_tree_view = File.read(File.expand_path("dummy/app/views/docs/recordings_tree.html.erb", __dir__))
-
-    assert_includes recordings_tree_view, 'title: "Recordings tree"'
-    assert_includes recordings_tree_view, "FlatPack::Tree::Component"
-    recording_tree_partial = File.read(File.expand_path("dummy/app/views/docs/_recording_tree_node.html.erb", __dir__))
-    assert_includes recording_tree_partial, "parent_builder.node"
-    refute_includes recordings_tree_view, "Current structure"
-    refute_includes recordings_tree_view, "This tree is generated from RecordingStudio::Recording records"
+  def test_template_rename_script_and_dummy_docs_pages_are_gone
+    refute File.exist?(File.expand_path("../bin/rename_gem", __dir__))
+    refute File.exist?(File.expand_path("rename_gem_identity_test.rb", __dir__))
+    refute File.exist?(File.expand_path("rename_verification_test.rb", __dir__))
+    refute File.exist?(File.expand_path("../docs/recording_studio_dashboard/RENAMING.md", __dir__))
+    refute File.exist?(File.expand_path("controllers/docs_controller_test.rb", __dir__))
+    refute File.exist?(File.expand_path("dummy/app/controllers/docs_controller.rb", __dir__))
+    refute File.directory?(File.expand_path("dummy/app/views/docs", __dir__))
   end
 
   def test_engine_does_not_ship_a_home_view

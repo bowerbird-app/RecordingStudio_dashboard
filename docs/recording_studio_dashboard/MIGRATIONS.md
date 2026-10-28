@@ -172,15 +172,6 @@ bin/rails db:rollback
 
 ---
 
-## After Renaming the Gem
-
-When you rename the gem using `bin/rename_gem`, the migration files are automatically updated:
-
-- Class names change (e.g., `CreateRecordingStudioDashboardPages` → `CreateMyEnginePages`)
-- Table names change (e.g., `recording_studio_dashboard_pages` → `my_engine_pages`)
-
----
-
 ## Related Guides
 
 - [Installing](INSTALLING.md) — Full installation guide

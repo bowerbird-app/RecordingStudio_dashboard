@@ -22,7 +22,7 @@ This document covers how the devcontainer is configured and how to work in GitHu
    bin/dev
    ```
 4. **Open the app** – click the forwarded port 3000 in the "Ports" tab.
-5. **Start from the dummy app home page** at `/` and use `/users/sign_in` or `/docs/install` as needed.
+5. **Start from the dummy app home page** at `/` and use `/users/sign_in` as needed.
 
 ---
 
