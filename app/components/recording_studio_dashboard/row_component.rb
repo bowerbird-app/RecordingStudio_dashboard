@@ -21,7 +21,7 @@ module RecordingStudioDashboard
     def heading
       return if @row.title.blank? && @row.action.nil?
 
-      tag.div(class: "fp-on-backdrop flex items-end justify-between gap-4") do
+      tag.div(class: "flex items-end justify-between gap-4") do
         safe_join([title, action_link].compact)
       end
     end
@@ -40,8 +40,7 @@ module RecordingStudioDashboard
                text: @row.action.label,
                href: @row.action.url,
                style: :default,
-               size: :sm,
-               class: "fp-on-backdrop"
+               size: :sm
              ))
     end
 

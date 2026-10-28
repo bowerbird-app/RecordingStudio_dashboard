@@ -132,6 +132,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "nav.flat-pack-page-nav [data-fp-style=default]"
     assert_select "a[data-turbo-method=delete][data-fp-style=default]", text: "Sign out"
     assert_select "[data-dashboard-row] [data-fp-style=ghost]", count: 0
+    assert_select ".fp-on-backdrop [data-fp-style=default]", count: 0
     assert_select "a", text: "Personalised", count: 0
   end
 

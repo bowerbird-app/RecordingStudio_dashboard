@@ -19,7 +19,7 @@ Dashboard
 
 Flatpack draws cards, grids, carousels, empty states, and alerts. This gem decides which placements remain and how wide they are.
 
-A row heading is the section title and an optional action. It does not render a subtitle. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid. The header, the heading, the section title, and the action use `.fp-on-backdrop` so page text follows a layout photo. The action is a small Flatpack default button. That class retints page text, not default button tokens, so the filled pill stays readable over the photo. The widget grid does not use the class, so cards and other widget text keep their own color.
+A row heading is the section title and an optional action. It does not render a subtitle. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid. The header and the section title use `.fp-on-backdrop` so page text follows a layout photo. The action is a small Flatpack default button and stays outside that class. Default button text aliases `--surface-content-color`, which the class retargets, so a filled pill inside it would paint light type on a light fill. The widget grid does not use the class, so cards and other widget text keep their own color.
 
 ## Render order
 

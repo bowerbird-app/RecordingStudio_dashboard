@@ -8,7 +8,7 @@
 - Accessible dummy tag `v0.23.0`, Trashable dummy tag `v0.12.0` (`require: false`), Root Switchable dummy tag `v0.11.0`, Metrics dummy tag `v0.7.0`, and Cache dummy tag `v0.6.0`
 - FlatPack dummy tag `v0.1.327` (`>= 0.1.327`, `< 0.2` in the gemspec)
 
-Dashboard headers and row headings use Flatpack `.fp-on-backdrop`, which ships in `0.1.327`. Reload Flatpack CSS after the bump. Do not rebuild Tailwind for this class. Do not rerun the install generator.
+Dashboard headers and section titles use Flatpack `.fp-on-backdrop`, which ships in `0.1.327`. Row actions are default buttons and stay outside that class. Reload Flatpack CSS after the bump. Do not rebuild Tailwind for this class. Do not rerun the install generator.
 - Public RubyGems and GitHub access for dependency installation
 
 ## Verification
