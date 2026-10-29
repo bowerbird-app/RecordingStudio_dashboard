@@ -2,14 +2,10 @@
 
 ## [Unreleased]
 
-### Removed
-
-- Dummy coverage reports and `test/dummy/install_page.html` from git.
-- Stale `UPDATE_SUMMARY.md`.
-- Template rename script, rename tests, and dummy `/docs` starter pages.
-
 ### Changed
 
+- The gem version is `0.1.1`.
+- Dummy coverage reports and `test/dummy/install_page.html` are gitignored and untracked. They stay generated artifacts.
 - Dummy PostgreSQL fallback names are `recording_studio_dashboard_development` and `recording_studio_dashboard_test`.
 - Dummy overview, checklist, metric, and recent-item widgets use Flatpack `SectionTitle` for card and carousel headings.
 
