@@ -175,7 +175,7 @@ bin/rails db:migrate
 | `DB_PORT` | `5432` | PostgreSQL port |
 | `DB_USER` | `postgres` | PostgreSQL username |
 | `DB_PASSWORD` | `postgres` | PostgreSQL password |
-| `DB_NAME` | `recording_studio_dashboard_development` | Database name |
+| `DB_NAME` | `app_development` | Database name |
 | `REDIS_URL` | `redis://localhost:6379/0` | Redis connection URL |
 | `PORT` | `3000` | Rails server port |
 | `RAILS_MASTER_KEY` | (unset) | Shared dummy-app master key. Decrypts `test/dummy/config/credentials.yml.enc`. |
@@ -244,6 +244,7 @@ recording_studio_dashboard/
 
 ## Next Steps
 
+- [Rename the gem](RENAMING.md) to your own name
 - [Configure the gem](CONFIGURATION.md) with your settings
 - [Understand Tailwind setup](CSS_JS_ASSETS_ARCHITECTURE.md)
 - [Install in a host app](INSTALLING.md)
