@@ -76,6 +76,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Needs content"
     assert_includes response.body, "No recent items yet"
     assert_select "[data-dashboard-placement=empty_items][data-dashboard-state=empty]"
+    assert_select "[data-dashboard-row=vacant] [data-fp-style=default]", text: /View all/, count: 0
     assert_backdrop_page_text
   end
 
