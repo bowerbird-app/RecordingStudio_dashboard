@@ -10,7 +10,7 @@ class ComposerTest < Minitest::Test
       return RecordingStudioDashboard::Preparation.loading if config[:loading]
       return RecordingStudioDashboard::Preparation.empty(message: "none") if config[:value].nil?
 
-      RecordingStudioDashboard::Preparation.content(config[:value])
+      RecordingStudioDashboard::Preparation.content(config[:value], truncated: config.fetch(:truncated, false))
     end
   end
 
@@ -35,7 +35,7 @@ class ComposerTest < Minitest::Test
   def setup
     RecordingStudioDashboard.reset!
     RecordingStudioDashboard.register_widget(
-      :metric, component: Probe, default_span: 6, options: %i[name value loading boom],
+      :metric, component: Probe, default_span: 6, options: %i[name value loading boom truncated],
                permission: lambda(&:allow_metrics?)
     )
     RecordingStudioDashboard.register_widget(:setup, component: Probe, default_span: 6, options: %i[name value])
@@ -252,6 +252,45 @@ class ComposerTest < Minitest::Test
     )
 
     assert_equal %i[extra views downloads], compose(definition, overrides).rows.first.widgets.map(&:id)
+  end
+
+  def test_row_action_stays_when_a_widget_list_is_truncated
+    definition = RecordingStudioDashboard.register(:truncated) do
+      row :activity, title: "Recent activity", action: { label: "View all", url: "/all" } do
+        widget :metric, id: :recent, config: { name: "recent", value: [1, 2], truncated: true }
+      end
+    end
+    row = compose(definition).rows.first
+
+    assert_equal "View all", row.action.label
+    assert_equal "/all", row.action.url
+  end
+
+  def test_row_action_is_omitted_when_nothing_is_truncated
+    definition = RecordingStudioDashboard.register(:short) do
+      row :activity, title: "Recent activity", action: { label: "View all", url: "/all" } do
+        widget :metric, id: :recent, config: { name: "recent", value: [1] }
+      end
+    end
+    row = compose(definition).rows.first
+
+    assert_nil row.action
+    assert_equal "Recent activity", row.title
+    assert_equal [1], row.widgets.first.preparation.data
+  end
+
+  def test_row_action_is_omitted_when_the_row_is_empty
+    definition = RecordingStudioDashboard.register(:vacant) do
+      row :activity, title: "Recent activity", action: { label: "View all", url: "/all" },
+                     empty: { policy: :message, message: "Nothing yet" } do
+        widget :metric, id: :recent, config: { name: "recent", value: nil }
+      end
+    end
+    row = compose(definition).rows.first
+
+    assert_nil row.action
+    assert_equal "Recent activity", row.title
+    assert_empty row.widgets
   end
 
   def test_overrides_store_only_the_delta

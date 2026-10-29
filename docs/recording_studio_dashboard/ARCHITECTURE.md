@@ -19,7 +19,7 @@ Dashboard
 
 Flatpack draws cards, grids, carousels, empty states, and alerts. This gem decides which placements remain and how wide they are.
 
-A row heading is the section title and an optional action. It does not render a subtitle. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid. The header, the heading, the section title, and the action use `.fp-on-backdrop` so page text and ghost actions follow a layout photo. The widget grid does not, so cards and other widget text keep their own color.
+A row heading is the section title and an optional action. It does not render a subtitle. The composer keeps a registered action only when any laid widget's preparation is truncated. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid. The dashboard stack uses Tailwind `gap-12` between the header and each row. The header and the section title use `.fp-on-backdrop` so page text follows a layout photo. The action is a small Flatpack default button and stays outside that class. Default button text aliases `--surface-content-color`, which the class retargets, so a filled pill inside it would paint light type on a light fill. The widget grid does not use the class, so cards and other widget text keep their own color.
 
 ## Render order
 
@@ -134,4 +134,4 @@ A custom `Policy` may turn individual flags on. `Policy.resolve` accepts `:fixed
 
 Unknown `config` keys raise `ArgumentError` at registration time. A span outside `supported_spans` raises too.
 
-`Preparation` states are `:content`, `:empty`, `:loading`, and `:error`. Not permitted and not applicable never become preparations. Those placements are omitted before `prepare`.
+`Preparation` states are `:content`, `:empty`, `:loading`, and `:error`. `Preparation.content(data, truncated: true)` marks a list that has more items than the widget showed. `truncated` defaults to false. Empty, loading, and error are never truncated. Not permitted and not applicable never become preparations. Those placements are omitted before `prepare`. A row `action` stays only when a remaining widget is truncated.

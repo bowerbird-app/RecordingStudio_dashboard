@@ -49,7 +49,7 @@ end
 
 `RecordingStudioDashboard.component(:home, context: context)` returns the dashboard component. Render it from a host view. The header component receives `context:`. Site logo, account menu, and top navigation stay in the host layout.
 
-A row heading is the section title and an optional action. It does not render a subtitle.
+A row heading is the section title and an optional action. It does not render a subtitle. The action is a small Flatpack default button. Keep it outside `.fp-on-backdrop` so the filled pill keeps dark type. The dashboard stack uses `gap-12` between rows. The gap from a row title to its widgets stays small. Registering an `action:` is not enough. The composer keeps that button only when a widget in the row returns `truncated: true` from `prepare`.
 
 Two different widget types can share a row. Each placement has a stable id. The id defaults to the widget type id, and a second placement of the same type sets its own id.
 
@@ -77,7 +77,9 @@ def self.prepare(context, config)
   return RecordingStudioDashboard::Preparation.empty if items.nil?
   return RecordingStudioDashboard::Preparation.empty(message: "No recent items yet") if items.empty?
 
-  RecordingStudioDashboard::Preparation.content(items)
+  limit = Integer(config.fetch(:limit, 10))
+  shown = items.first(limit)
+  RecordingStudioDashboard::Preparation.content(shown, truncated: items.size > limit)
 end
 ```
 
@@ -99,7 +101,7 @@ widget :getting_started, span: 6 do
 end
 ```
 
-When every placement in a row is gone, the row drops, including its title and action. Set a row `empty:` policy when the heading should remain.
+When every placement in a row is gone, the row drops, including its title and action. Set a row `empty:` policy when the heading should remain. An empty or short list does not show the heading action. Pass `truncated: true` on `Preparation.content` when more items exist than the widget showed.
 
 ```ruby
 row :vacant, title: "Needs content", empty: { policy: :message, message: "This section is waiting for content." } do

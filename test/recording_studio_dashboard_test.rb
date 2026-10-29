@@ -4,7 +4,7 @@ require "test_helper"
 
 class RecordingStudioDashboardTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.1.1", ::RecordingStudioDashboard::VERSION
+    assert_equal "0.1.2", ::RecordingStudioDashboard::VERSION
   end
 
   def test_dummy_generated_artifacts_are_gitignored_and_untracked
@@ -12,16 +12,14 @@ class RecordingStudioDashboardTest < Minitest::Test
     gitignore = File.read(File.expand_path("../.gitignore", __dir__))
 
     assert_includes gitignore, "test/dummy/coverage/"
-    assert_includes gitignore, "test/dummy/install_page.html"
+    refute_includes gitignore, "test/dummy/install_page.html"
 
-    tracked = `git -C #{root} ls-files -- test/dummy/coverage test/dummy/install_page.html`
+    tracked = `git -C #{root} ls-files -- test/dummy/coverage`
     assert_equal "", tracked.strip
 
     spec = Gem::Specification.load(File.expand_path("../recording_studio_dashboard.gemspec", __dir__))
-    packaged = spec.files.select do |path|
-      path == "test/dummy/install_page.html" || path.start_with?("test/dummy/coverage/")
-    end
-    assert_empty packaged, "gemspec must not package dummy coverage or install_page.html (got #{packaged.inspect})"
+    packaged = spec.files.select { |path| path.start_with?("test/dummy/coverage/") }
+    assert_empty packaged, "gemspec must not package dummy coverage (got #{packaged.inspect})"
   end
 
   def test_dummy_database_yml_uses_this_gem_name_for_local_fallbacks

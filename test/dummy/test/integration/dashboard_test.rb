@@ -18,7 +18,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     get root_path
 
     assert_response :success
-    assert_select "[data-dashboard=home]"
+    assert_select "[data-dashboard=home].gap-12"
     assert_select "[data-dashboard-row=studio] [data-dashboard-placement]", count: 2
     assert_select "[data-dashboard-placement=recent_items] [data-collection-item]", count: 3
     assert_select "[data-dashboard-placement=downloads]"
@@ -28,7 +28,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     refute_includes response.body, "Two different widgets share this row."
     refute_includes response.body, "One widget owns every card inside it."
     assert_select "[data-dashboard-row=studio] .fp-section-title.fp-on-backdrop.mb-0"
-    assert_select "[data-dashboard-row=activity] .fp-on-backdrop", text: /View all/
+    assert_select "[data-dashboard-row=activity] [data-fp-style=default]", text: /View all/
     assert_select "[data-dashboard-row=studio].gap-3"
     assert_select "[data-dashboard-placement=overview] .fp-section-title h3", text: "Studio overview"
     assert_select "[data-dashboard-placement=checklist] .fp-section-title h3", text: "Getting started"
@@ -76,6 +76,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Needs content"
     assert_includes response.body, "No recent items yet"
     assert_select "[data-dashboard-placement=empty_items][data-dashboard-state=empty]"
+    assert_select "[data-dashboard-row=vacant] [data-fp-style=default]", text: /View all/, count: 0
     assert_backdrop_page_text
   end
 
@@ -131,6 +132,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "nav.flat-pack-page-nav.fp-on-backdrop", count: 0
     assert_select "nav.flat-pack-page-nav [data-fp-style=default]"
     assert_select "a[data-turbo-method=delete][data-fp-style=default]", text: "Sign out"
+    assert_select "[data-dashboard-row] [data-fp-style=ghost]", count: 0
     assert_select ".fp-on-backdrop [data-fp-style=default]", count: 0
     assert_select "a", text: "Personalised", count: 0
   end

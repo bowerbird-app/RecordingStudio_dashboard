@@ -208,7 +208,7 @@ After skills, the same script lists `*.mdc` files from the plugin `rules/` direc
 
 `.cursor/skills/` and `.cursor/rules/` are gitignored. Local teammates who already have the Recording Studio Cursor plugin must not commit a second copy. Do not vendor `SKILL.md` or `*.mdc` files. Re-run the script anytime; it overwrites in place.
 
-`test/dummy/coverage/` and `test/dummy/install_page.html` are gitignored generated artifacts. Do not add them back to git.
+`test/dummy/coverage/` is a gitignored generated artifact. Do not add it back to git.
 
 ---
 

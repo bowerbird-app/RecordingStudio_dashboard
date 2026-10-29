@@ -57,9 +57,16 @@ module RecordingStudioDashboard
       spans = SpanMath.effective(widgets.map(&:span), row.collapse)
       laid = widgets.each_with_index.map { |widget, index| widget.with(span: spans.fetch(index)) }
       LaidRow.new(
-        id: row.id, title: row.title, description: row.description, action: row.action,
+        id: row.id, title: row.title, description: row.description, action: row_action(row, laid),
         spacing: row.spacing, widgets: laid, empty_state: row.empty_state
       )
+    end
+
+    def row_action(row, widgets)
+      return nil if row.action.nil?
+      return row.action if widgets.any? { |widget| widget.preparation.truncated? }
+
+      nil
     end
 
     def prepare(type, placement)

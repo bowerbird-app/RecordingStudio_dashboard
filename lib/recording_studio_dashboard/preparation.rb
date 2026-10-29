@@ -6,8 +6,11 @@ module RecordingStudioDashboard
 
     attr_reader :state, :data, :message, :error
 
-    def self.content(data = nil)
-      new(:content, data, nil, nil)
+    def self.content(data = nil, truncated: false, **fields)
+      raise ArgumentError, "pass one content payload" unless data.nil? || fields.empty?
+
+      payload = data.nil? && fields.any? ? fields : data
+      new(:content, payload, nil, nil, truncated: truncated)
     end
 
     def self.empty(message: nil)
@@ -22,13 +25,19 @@ module RecordingStudioDashboard
       new(:error, nil, message, error)
     end
 
-    def initialize(state, data, message, error)
+    def initialize(state, data, message, error, truncated: false)
       raise ArgumentError, "unknown preparation state #{state}" unless STATES.include?(state)
+      raise ArgumentError, "truncated is only valid for content" if truncated && state != :content
 
       @state = state
       @data = data
       @message = message
       @error = error
+      @truncated = truncated
+    end
+
+    def truncated?
+      @truncated
     end
   end
 end

@@ -14,7 +14,10 @@ module Demo
 
       limit = Integer(config.fetch(:limit, 3))
       display = config.fetch(:display, :grid).to_sym
-      RecordingStudioDashboard::Preparation.content(items: ITEMS.first(limit), display: display)
+      RecordingStudioDashboard::Preparation.content(
+        { items: ITEMS.first(limit), display: display },
+        truncated: ITEMS.size > limit
+      )
     end
 
     def initialize(context:, config:, preparation:)
