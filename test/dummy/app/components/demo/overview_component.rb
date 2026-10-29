@@ -17,7 +17,12 @@ module Demo
         card.body do
           tag.div(class: "space-y-2") do
             safe_join([
-              tag.h3("Studio overview", class: "text-lg font-semibold leading-tight"),
+              render(FlatPack::SectionTitle::Component.new(
+                       title: "Studio overview",
+                       size: :md,
+                       spacing: :none,
+                       level: :h3
+                     )),
               tag.p(@preparation.data.fetch(:summary), class: "text-sm leading-6")
             ])
           end

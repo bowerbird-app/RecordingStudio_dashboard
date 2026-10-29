@@ -262,6 +262,23 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes readme, "recording_studio/v3.0.0"
   end
 
+  def test_dummy_widget_headings_use_flatpack_section_title
+    widget_sources = %w[
+      dummy/app/components/demo/overview_component.rb
+      dummy/app/components/demo/checklist_component.rb
+      dummy/app/components/demo/metric_component.rb
+      dummy/app/components/demo/recent_items_component.rb
+    ].map { |path| File.read(File.expand_path(path, __dir__)) }
+
+    widget_sources.each do |source|
+      assert_includes source, "FlatPack::SectionTitle::Component.new"
+      assert_includes source, "size: :md"
+      assert_includes source, "spacing: :none"
+      assert_includes source, "level: :h3"
+      refute_includes source, "tag.h3"
+    end
+  end
+
   def test_dummy_home_page_renders_a_registered_dashboard
     view_path = File.expand_path("dummy/app/views/dashboards/show.html.erb", __dir__)
     view_source = File.read(view_path)

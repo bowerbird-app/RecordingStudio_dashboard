@@ -19,7 +19,12 @@ module Demo
         card.body do
           tag.div(class: "space-y-2") do
             safe_join([
-              tag.h3("Getting started", class: "text-lg font-semibold leading-tight"),
+              render(FlatPack::SectionTitle::Component.new(
+                       title: "Getting started",
+                       size: :md,
+                       spacing: :none,
+                       level: :h3
+                     )),
               tag.ul(class: "space-y-3 text-sm leading-6") do
                 safe_join(@preparation.data.map { |step| tag.li(step, data: { checklist_step: step }) })
               end

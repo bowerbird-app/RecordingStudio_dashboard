@@ -38,7 +38,12 @@ module Demo
         card.body do
           tag.div(class: "space-y-2") do
             safe_join([
-              tag.h3(item.fetch(:title), class: "text-lg font-semibold leading-tight"),
+              render(FlatPack::SectionTitle::Component.new(
+                       title: item.fetch(:title),
+                       size: :md,
+                       spacing: :none,
+                       level: :h3
+                     )),
               tag.p(item.fetch(:detail), class: "text-sm leading-6", data: { collection_item: item.fetch(:title) })
             ])
           end
@@ -57,7 +62,12 @@ module Demo
     end
 
     def slide_html(item)
-      tag.h3(item.fetch(:title)) + tag.p(item.fetch(:detail))
+      render(FlatPack::SectionTitle::Component.new(
+               title: item.fetch(:title),
+               size: :md,
+               spacing: :none,
+               level: :h3
+             )) + tag.p(item.fetch(:detail))
     end
 
     def items
