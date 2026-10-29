@@ -175,7 +175,7 @@ bin/rails db:migrate
 | `DB_PORT` | `5432` | PostgreSQL port |
 | `DB_USER` | `postgres` | PostgreSQL username |
 | `DB_PASSWORD` | `postgres` | PostgreSQL password |
-| `DB_NAME` | `app_development` | Database name |
+| `DB_NAME` | `recording_studio_dashboard_development` | Database name |
 | `REDIS_URL` | `redis://localhost:6379/0` | Redis connection URL |
 | `PORT` | `3000` | Rails server port |
 | `RAILS_MASTER_KEY` | (unset) | Shared dummy-app master key. Decrypts `test/dummy/config/credentials.yml.enc`. |
@@ -207,6 +207,8 @@ The script lists `recording-studio-*` skill ids from the public GitHub contents 
 After skills, the same script lists `*.mdc` files from the plugin `rules/` directory and writes each into `.cursor/rules/<filename>`. If that listing 404s, it warns and skips rules. It does not clone the plugin repo, does not write `~/.cursor/skills` or `~/.cursor/rules`, and exits 0 on fetch failures so the Build still succeeds.
 
 `.cursor/skills/` and `.cursor/rules/` are gitignored. Local teammates who already have the Recording Studio Cursor plugin must not commit a second copy. Do not vendor `SKILL.md` or `*.mdc` files. Re-run the script anytime; it overwrites in place.
+
+`test/dummy/coverage/` is a gitignored generated artifact. Do not add it back to git.
 
 ---
 

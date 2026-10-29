@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2] - 2026-10-29
+
+### Changed
+
+- The gem version is `0.1.2`.
+- Dummy coverage reports are gitignored and untracked. They stay generated artifacts.
+- Dummy PostgreSQL fallback names are `recording_studio_dashboard_development` and `recording_studio_dashboard_test`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.1.2`. Reload the host. No Featured In code change.
+
 ## [0.1.1] - 2026-10-28
 
 ### Changed
