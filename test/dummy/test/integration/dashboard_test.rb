@@ -30,6 +30,10 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard-row=studio] .fp-section-title.fp-on-backdrop.mb-0"
     assert_select "[data-dashboard-row=activity] .fp-on-backdrop", text: /View all/
     assert_select "[data-dashboard-row=studio].gap-3"
+    assert_select "[data-dashboard-placement=overview] .fp-section-title h3", text: "Studio overview"
+    assert_select "[data-dashboard-placement=checklist] .fp-section-title h3", text: "Getting started"
+    assert_select "[data-dashboard-placement=downloads] .fp-section-title h3", text: "Downloads"
+    assert_select "[data-dashboard-placement=recent_items] .fp-section-title h3", text: "Spring release"
     assert_select "[data-dashboard-placement=overview] .border-b", count: 0
     assert_select "[data-dashboard-placement=checklist] .border-b", count: 0
     assert_select "[data-dashboard-placement=recent_items] .border-b", count: 0
@@ -46,6 +50,8 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_select "[data-dashboard=carousel] [data-dashboard-placement=recent_items]", count: 1
     assert_includes response.body, "Radio session"
     assert_select "[data-dashboard=carousel] .flat-pack-carousel"
+    assert_select "[data-dashboard=carousel] [data-dashboard-placement=recent_items] .fp-section-title h3",
+                  text: "Radio session"
     refute_includes response.body, "configured as a carousel."
     assert_select "[data-dashboard-placement=carousel_views]", text: /0/
     assert_backdrop_page_text

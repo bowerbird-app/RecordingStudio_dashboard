@@ -11,6 +11,7 @@
 ### Changed
 
 - Dummy PostgreSQL fallback names are `recording_studio_dashboard_development` and `recording_studio_dashboard_test`.
+- Dummy overview, checklist, metric, and recent-item widgets use Flatpack `SectionTitle` for card and carousel headings.
 
 ## [0.1.0] - 2026-10-27
 
