@@ -82,7 +82,9 @@ RecordingStudioDashboard.register(:empty) do
     widget :checklist, id: :hidden_checklist, visible_if: :never?
   end
 
-  row :vacant, title: "Needs content", empty: { policy: :message, message: "This section is waiting for content." } do
+  row :vacant, title: "Needs content",
+      action: { label: "View all", url: "/dashboards/carousel" },
+      empty: { policy: :message, message: "This section is waiting for content." } do
     widget :recent_items, id: :empty_items, span: 12, config: { limit: 3, display: :grid, source: "empty" }
   end
 end
