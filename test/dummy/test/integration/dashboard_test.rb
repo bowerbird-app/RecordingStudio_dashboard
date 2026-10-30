@@ -20,6 +20,9 @@ class DashboardTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "[data-dashboard=home].gap-12"
     assert_select "[data-dashboard-row=studio] [data-dashboard-placement]", count: 2
+    assert_select "[data-dashboard-row=studio] .fp-grid__item[data-dashboard-placement=overview].min-w-0.col-span-1.md\\:col-span-2.lg\\:col-span-6"
+    assert_select "[data-dashboard-row=studio] .fp-grid__item[data-dashboard-placement=checklist].min-w-0.col-span-1.md\\:col-span-2.lg\\:col-span-6"
+    assert_select "[data-dashboard-row=activity] .fp-grid__item[data-dashboard-placement=recent_items].min-w-0.col-span-2.md\\:col-span-4.lg\\:col-span-12"
     assert_select "[data-dashboard-placement=recent_items] [data-collection-item]", count: 3
     assert_select "[data-dashboard-placement=downloads]"
     assert_select "[data-dashboard-placement=views]"
@@ -62,6 +65,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "[data-dashboard-placement=overview][data-dashboard-span=12]"
+    assert_select ".fp-grid__item[data-dashboard-placement=overview][data-dashboard-span=12].col-span-2.md\\:col-span-4.lg\\:col-span-12"
     assert_select "[data-dashboard-placement=checklist]", count: 0
     refute_includes response.body, "Getting started"
     assert_backdrop_page_text
@@ -96,6 +100,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "[data-dashboard-placement=overview][data-dashboard-span=12]"
+    assert_select ".fp-grid__item[data-dashboard-placement=overview][data-dashboard-span=12].col-span-2.md\\:col-span-4.lg\\:col-span-12"
     assert_select "[data-dashboard-placement=checklist]", count: 0
     stored = RecordingStudioDashboard::Preference.find_by!(
       dashboard_key: "personalised",

@@ -4,7 +4,7 @@ require "test_helper"
 
 class RecordingStudioDashboardTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.1.2", ::RecordingStudioDashboard::VERSION
+    assert_equal "0.2.0", ::RecordingStudioDashboard::VERSION
   end
 
   def test_dummy_generated_artifacts_are_gitignored_and_untracked
@@ -39,7 +39,7 @@ class RecordingStudioDashboardTest < Minitest::Test
     gemspec = File.read(File.expand_path("../recording_studio_dashboard.gemspec", __dir__))
 
     assert_includes gemspec, 'spec.add_dependency "recording_studio", "~> 6.2"'
-    assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.327", "< 0.2"'
+    assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.331", "< 0.2"'
   end
 
   def test_dashboard_shell_opts_page_text_into_the_backdrop
@@ -60,6 +60,21 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes dashboard_view, "Personalised"
     refute_includes File.read(File.expand_path("dummy/app/components/demo/overview_component.rb", __dir__)),
                     "fp-on-backdrop"
+  end
+
+  def test_row_grid_uses_flatpack_item_span_hashes
+    row = File.read(File.expand_path("../app/components/recording_studio_dashboard/row_component.rb", __dir__))
+    frame = File.read(File.expand_path("../app/components/recording_studio_dashboard/widget_frame_component.rb",
+                                       __dir__))
+
+    assert_includes row, "FlatPack::Grid::Component.new(cols: 12, gap: @row.spacing)"
+    assert_includes row, "grid.with_item(span: WidgetFrameComponent.item_span(widget.span), class: \"min-w-0\""
+    refute_includes row, "safe_join(@row.widgets.map"
+    refute_includes frame, "SPAN_CLASSES"
+    refute_includes frame, "col-span-2 md:col-span-3 lg:col-span-7"
+    assert_includes frame, "7 => { base: 2, md: 3, lg: 7 }"
+    refute_includes frame, "span: 7"
+    assert_includes frame, "def call\n      body"
   end
 
   def test_gemspec_excludes_cursor_config
@@ -106,7 +121,7 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes gemfile, 'tag: "v0.9.0"'
     refute_includes gemfile, 'tag: "v0.5.0"'
     refute_includes gemfile, 'tag: "v0.5.1"'
-    assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.327"'
+    assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.331"'
     refute_includes gemfile, 'tag: "v0.1.315"'
     refute_includes gemfile, "recording_studio/v3.0.0"
     refute_includes gemfile, 'tag: "v4.4.0"'
@@ -256,7 +271,7 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes readme, "dummy GitHub tag `v4.7.0`"
     refute_includes readme, "dummy GitHub tag `v4.6.0`"
     refute_includes readme, "dummy GitHub tag `v4.5.0`"
-    assert_includes readme, "dummy GitHub tag `v0.1.327`"
+    assert_includes readme, "dummy GitHub tag `v0.1.331`"
     refute_includes readme, "dummy GitHub tag `v0.1.315`"
     assert_includes readme, "dummy GitHub tag `v0.23.0`"
     assert_includes readme, "dummy GitHub tag `v0.12.0`"

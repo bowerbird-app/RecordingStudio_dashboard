@@ -4,21 +4,26 @@ require "flat_pack"
 
 module RecordingStudioDashboard
   class WidgetFrameComponent < ViewComponent::Base
-    # Tailwind scans these literals for the 12-column spans FlatPack::Grid uses at lg.
-    SPAN_CLASSES = {
-      1 => "col-span-1 md:col-span-1 lg:col-span-1",
-      2 => "col-span-1 md:col-span-1 lg:col-span-2",
-      3 => "col-span-1 md:col-span-1 lg:col-span-3",
-      4 => "col-span-1 md:col-span-2 lg:col-span-4",
-      5 => "col-span-1 md:col-span-2 lg:col-span-5",
-      6 => "col-span-1 md:col-span-2 lg:col-span-6",
-      7 => "col-span-2 md:col-span-3 lg:col-span-7",
-      8 => "col-span-2 md:col-span-3 lg:col-span-8",
-      9 => "col-span-2 md:col-span-3 lg:col-span-9",
-      10 => "col-span-2 md:col-span-4 lg:col-span-10",
-      11 => "col-span-2 md:col-span-4 lg:col-span-11",
-      12 => "col-span-2 md:col-span-4 lg:col-span-12"
+    # Proportional spans for a 12-column grid. FlatPack has no scale-with-columns
+    # span, so Dashboard still owns these hashes. A hash is emitted as written.
+    ITEM_SPANS = {
+      1 => { base: 1, md: 1, lg: 1 },
+      2 => { base: 1, md: 1, lg: 2 },
+      3 => { base: 1, md: 1, lg: 3 },
+      4 => { base: 1, md: 2, lg: 4 },
+      5 => { base: 1, md: 2, lg: 5 },
+      6 => { base: 1, md: 2, lg: 6 },
+      7 => { base: 2, md: 3, lg: 7 },
+      8 => { base: 2, md: 3, lg: 8 },
+      9 => { base: 2, md: 3, lg: 9 },
+      10 => { base: 2, md: 4, lg: 10 },
+      11 => { base: 2, md: 4, lg: 11 },
+      12 => { base: 2, md: 4, lg: 12 }
     }.freeze
+
+    def self.item_span(columns)
+      ITEM_SPANS.fetch(columns)
+    end
 
     def initialize(widget:, context:)
       super()
@@ -27,19 +32,15 @@ module RecordingStudioDashboard
     end
 
     def call
-      tag.div(class: frame_class, data: frame_data) { body }
-    end
-
-    private
-
-    def frame_class
-      [SPAN_CLASSES.fetch(@widget.span), "min-w-0"].join(" ")
+      body
     end
 
     def frame_data
       { dashboard_placement: @widget.id, dashboard_widget: @widget.widget, dashboard_span: @widget.span,
         dashboard_state: @widget.preparation.state }
     end
+
+    private
 
     def body
       case @widget.preparation.state
