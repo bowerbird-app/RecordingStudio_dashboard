@@ -47,8 +47,12 @@ module RecordingStudioDashboard
     def body
       return empty_panel if @row.widgets.empty?
 
-      render(FlatPack::Grid::Component.new(cols: 12, gap: @row.spacing)) do
-        safe_join(@row.widgets.map { |widget| render(WidgetFrameComponent.new(widget: widget, context: @context)) })
+      render(FlatPack::Grid::Component.new(cols: 12, gap: @row.spacing)) do |grid|
+        @row.widgets.each do |widget|
+          frame = WidgetFrameComponent.new(widget: widget, context: @context)
+          grid.with_item(span: WidgetFrameComponent.item_span(widget.span), class: "min-w-0",
+                         data: frame.frame_data) { render(frame) }
+        end
       end
     end
 

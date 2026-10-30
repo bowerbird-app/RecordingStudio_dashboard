@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.0] - 2026-10-30
+
+### Changed
+
+- The gem version is `0.2.0`.
+- Runtime Flatpack floor is `>= 0.1.331`, `< 0.2`. Development and dummy locks use GitHub tag `v0.1.331`.
+- Dashboard rows pass each widget through Flatpack Grid `with_item` with a responsive `span:` hash. The proportional 12-column map stays in Dashboard. Widget frames render only their body. Grid cells get `fp-grid__item` plus the same `col-span-*` classes as before.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.2.0` and Flatpack to `v0.1.331`.
+- Reload Flatpack CSS. Rebuild host Tailwind so `col-span-1` through `col-span-12`, `col-span-full`, the `sm:` / `md:` / `lg:` / `xl:` prefixes, `fp-grid__item`, and `gap-[var(--stack-gap-sm)]` / `gap-[var(--stack-gap-md)]` / `gap-[var(--stack-gap-lg)]` exist. Flatpack Grid gap now uses those stack tokens instead of `gap-2` / `gap-4` / `gap-6`. Do not rerun the install generator. No Featured In registration change.
+
 ## [0.1.2] - 2026-10-29
 
 ### Changed
