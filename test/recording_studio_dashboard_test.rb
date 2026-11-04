@@ -202,9 +202,8 @@ class RecordingStudioDashboardTest < Minitest::Test
       File.expand_path("../app/controllers/recording_studio_dashboard/application_controller.rb", __dir__)
     )
 
-    assert_includes controller_source, "recording_studio_layout"
-    assert_includes controller_source, "RecordingStudio::DEFAULT_LAYOUT"
-    assert_includes controller_source, "RecordingStudioDashboard.configuration.layout"
+    assert_includes controller_source, "recording_studio_layout { RecordingStudioDashboard.configuration.layout }"
+    refute_includes controller_source, "RecordingStudio::DEFAULT_LAYOUT"
     refute_includes controller_source, 'layout "application"'
     refute_includes controller_source, "UsesDefaultLayout"
     refute File.exist?(File.expand_path("dummy/config/initializers/flatpack_compat.rb", __dir__))

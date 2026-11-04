@@ -2,7 +2,7 @@
 
 `RecordingStudioDashboard::Configuration` stores a `RecordingStudio::Hooks` instance and a `layout` setting. It has no API key, feature flag, or timeout setting. `merge!` calls a setter only when that setter exists, so unknown YAML keys are ignored.
 
-`layout` defaults to `nil`. `RecordingStudio::Layout.accept` validates the value. Pass a layout name, `false`, or a callable that accepts `controller:`. Engine controllers call `recording_studio_layout`. A `nil` setting uses `RecordingStudio::DEFAULT_LAYOUT`.
+`layout` defaults to `nil`. `RecordingStudio::Layout.accept` validates the value. Pass a layout name, `false`, or a callable that accepts `controller:`. Engine controllers call `recording_studio_layout { RecordingStudioDashboard.configuration.layout }`. A `nil` setting follows `RecordingStudio.configuration.layout`, then `recording_studio/default_layout`.
 
 `to_h` returns the count of callbacks registered on each hook.
 

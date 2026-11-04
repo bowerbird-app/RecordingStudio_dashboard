@@ -5,7 +5,7 @@
 ### Changed
 
 - The gem version is `0.2.1`.
-- Engine controllers call `recording_studio_layout`. `RecordingStudioDashboard::Configuration#layout` defaults to `nil` and is validated by `RecordingStudio::Layout.accept`. A `nil` setting uses `RecordingStudio::DEFAULT_LAYOUT` on the engine controller.
+- Engine controllers call `recording_studio_layout { RecordingStudioDashboard.configuration.layout }`. `RecordingStudioDashboard::Configuration#layout` defaults to `nil` and is validated by `RecordingStudio::Layout.accept`. A `nil` setting follows `RecordingStudio.configuration.layout`, then `recording_studio/default_layout`.
 - Development and dummy locks pin Recording Studio `v6.3.0`, Flatpack `v0.1.341`, Accessible `v0.24.0`, Trashable `v0.12.2`, Root Switchable `v0.11.4`, Metrics `v0.7.2`, and Cache `v0.6.2`. The gemspec floor stays `recording_studio` `~> 6.2` and Flatpack `>= 0.1.331`, `< 0.2`.
 - `rack` is `>= 3.2.8` in both lockfiles. `view_component` stays `4.20.0`.
 - The dummy no longer prepends a Flatpack Card and PageNav keyword shim.
