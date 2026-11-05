@@ -44,6 +44,32 @@ class ConfigurationTest < Minitest::Test
     assert_equal 1, result.fetch(:hooks_registered).fetch(:after_service)
   end
 
+  def test_layout_defaults_to_nil_and_is_validated_by_layout_accept
+    assert_nil @configuration.layout
+
+    @configuration.layout = RecordingStudio::DEFAULT_LAYOUT
+    assert_equal RecordingStudio::DEFAULT_LAYOUT, @configuration.layout
+
+    @configuration.layout = false
+    assert_equal false, @configuration.layout
+
+    @configuration.layout = nil
+    assert_nil @configuration.layout
+
+    callable = ->(controller:) { controller && RecordingStudio::DEFAULT_LAYOUT }
+    @configuration.layout = callable
+    assert_equal callable, @configuration.layout
+
+    error = assert_raises(ArgumentError) { @configuration.layout = 1 }
+    assert_match(/layout must be/, error.message)
+
+    error = assert_raises(ArgumentError) { @configuration.layout = ->(controller) { controller } }
+    assert_match(/controller:/, error.message)
+
+    @configuration.merge!(layout: RecordingStudio::DEFAULT_LAYOUT)
+    assert_equal RecordingStudio::DEFAULT_LAYOUT, @configuration.layout
+  end
+
   def test_configure_without_block_is_safe
     RecordingStudioDashboard.configure
 

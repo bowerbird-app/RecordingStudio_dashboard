@@ -1,6 +1,6 @@
 > **Architecture Documentation**
 > *   **Canonical Source:** [bowerbird-app/recording_studio_dashboard](https://github.com/bowerbird-app/RecordingStudio_dashboard/tree/main/docs/recording_studio_dashboard)
-> *   **Last Updated:** May 5, 2026
+> *   **Last Updated:** November 4, 2026
 >
 > *Maintainers: Please update the date above when modifying this file.*
 
@@ -192,15 +192,15 @@ The `recording_studio_dashboard` helper provides access to all engine routes.
 
 ## RecordingStudio Host-App Check
 
-This template's dummy app uses RecordingStudio `v6.2.0` (`~> 6.2` in the gemspec). Keep
+This template's dummy app uses RecordingStudio `v6.3.0` (`~> 6.2` in the gemspec). Keep
 `config.require_recordable_declarations = true`, declare every configured recordable with
 `recording_studio_recordable(...)`, and create roots with `RecordingStudio.root_recording_for(recordable)`.
 Child recordings must be created with an explicit `parent_recording`.
 
-When Accessible is bundled, pin the dummy or host Gemfile to `v0.23.0`, pin
-`recording_studio_trashable` to `v0.12.0` with `require: false` (Accessible loads the
+When Accessible is bundled, pin the dummy or host Gemfile to `v0.24.0`, pin
+`recording_studio_trashable` to `v0.12.2` with `require: false` (Accessible loads the
 query helpers only), run `bin/rails generate recording_studio_accessible:migrations`,
-migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.327`). Accessible `0.11.0+`
+migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.341`). Accessible `0.11.0+`
 stores access roles as strings (`view` / `edit` / `admin`); hosts upgrading past that
 release need the role-column migration. Accessible `0.14.0+` adds access constraint and
 access rule tables for optional action audiences; English hosts need no copy changes for
