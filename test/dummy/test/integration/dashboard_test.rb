@@ -31,7 +31,7 @@ class DashboardTest < ActionDispatch::IntegrationTest
     refute_includes response.body, "Two different widgets share this row."
     refute_includes response.body, "One widget owns every card inside it."
     assert_select "[data-dashboard-row=studio] .fp-section-title.fp-on-backdrop.mb-0"
-    assert_select "[data-dashboard-row=activity] [data-fp-style=default]", text: /View all/
+    assert_equal ["New", "View all"], activity_heading_labels
     assert_select "[data-dashboard-row=studio].gap-3"
     assert_select "[data-dashboard-placement=overview] .fp-section-title h3", text: "Studio overview"
     assert_select "[data-dashboard-placement=checklist] .fp-section-title h3", text: "Getting started"
@@ -127,6 +127,10 @@ class DashboardTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def activity_heading_labels
+    css_select("[data-dashboard-row=activity] [data-fp-style=default]").map { |node| node.text.squish }
+  end
 
   def assert_backdrop_page_text
     assert_select "[data-dashboard] > .fp-on-backdrop h1"
