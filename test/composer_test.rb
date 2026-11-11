@@ -74,6 +74,29 @@ class ComposerTest < Minitest::Test
     refute_includes @context.loaded, "steps"
   end
 
+  def test_hash_span_passes_through_when_the_row_is_full
+    definition = RecordingStudioDashboard.register(:hashed) do
+      row :studio do
+        widget :metric, id: :downloads, span: { base: 2, lg: 6 }, config: { name: "downloads", value: 4 }
+        widget :setup, id: :setup, span: { base: 2, lg: 6 }, config: { name: "steps", value: "steps" }
+      end
+    end
+
+    assert_equal [{ base: 2, lg: 6 }, { base: 2, lg: 6 }], compose(definition).rows.first.widgets.map(&:span)
+  end
+
+  def test_invalid_span_hash_raises_at_definition
+    error = assert_raises(ArgumentError) do
+      RecordingStudioDashboard.register(:bad_span) do
+        row :studio do
+          widget :metric, span: { base: 2, xs: 1 }, config: { name: "downloads", value: 4 }
+        end
+      end
+    end
+
+    assert_match(/invalid span breakpoints: xs/, error.message)
+  end
+
   def test_preserve_keeps_the_configured_span
     definition = RecordingStudioDashboard.register(:preserved) do
       row :studio, collapse: :preserve do

@@ -39,8 +39,9 @@ module RecordingStudioDashboard
     private
 
     def chosen_span(type)
-      chosen = Integer(@span || type.default_span)
-      raise ArgumentError, "span #{chosen} is not supported for #{type.id}" unless type.supports?(chosen)
+      chosen = SpanMath.coerce(@span.nil? ? type.default_span : @span)
+      width = SpanMath.layout_width(chosen)
+      raise ArgumentError, "span #{width} is not supported for #{type.id}" unless type.supports?(width)
 
       chosen
     end

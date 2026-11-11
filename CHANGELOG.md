@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0] - 2026-11-11
+
+### Changed
+
+- The gem version is `0.3.0`.
+- Integer spans 4, 5, and 6 use `base: 2` on the 12-column map, so they fill the row on phones. Spans 1-3 stay two-up at base. Spans 7-12 are unchanged.
+- A placement may set `span:` to a Flatpack Grid breakpoint hash such as `{ base: 2, lg: 6 }`. Valid hashes go straight to `grid.with_item(span:)`. Integers still go through `WidgetFrameComponent.item_span`. Collapse `:expand` / `:preserve` and `data-dashboard-span` use the `:lg` value, or the largest value when `:lg` is missing. `:expand` that actually redistributes leftover columns replaces a hash with an integer.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.3.0`. Integer placements of span 4, 5, or 6 become full width on phones. No widget registration change is required. A host that needs a half-width phone cell can pass a hash such as `span: { base: 1, md: 2, lg: 6 }`. Do not rerun the install generator.
+
 ## [0.2.1] - 2026-11-04
 
 ### Changed

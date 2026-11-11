@@ -112,9 +112,15 @@ Placement and widget empty policies use the same names.
 
 A row can set `empty: { policy: :message, message: "This section is waiting for content." }` so the heading remains after its widgets are empty.
 
+## Width
+
+Integer `span:` values are 12-column widths. `WidgetFrameComponent::ITEM_SPANS` maps them onto Flatpack Grid `cols: 12`. Spans 4-6 use `base: 2` so they fill a phone row. Spans 1-3 stay `base: 1`. A placement may pass a hash such as `{ base: 2, lg: 6 }` instead. `DefinitionBuilder` validates keys against Flatpack Grid breakpoints and values against that breakpoint's track count. A valid hash is passed to `grid.with_item(span:)`. Integers still go through `item_span`.
+
+Collapse `:expand` / `:preserve` and `data-dashboard-span` use the `:lg` value, or the largest value when `:lg` is missing. When `:expand` redistributes leftover columns, the laid span becomes an integer.
+
 ## Expansion
 
-`:expand` gives leftover columns to the widgets that remain. Earlier widgets receive the remainder first. Each span stays inside 1..12. `:preserve` leaves the configured spans in place. The default is `:expand`.
+`:expand` gives leftover columns to the widgets that remain. Earlier widgets receive the remainder first. Each span stays inside 1..12. `:preserve` leaves the configured spans in place. The default is `:expand`. Hash placements that already fill 12 keep the hash.
 
 ## Policies
 
