@@ -49,7 +49,17 @@ end
 
 `RecordingStudioDashboard.component(:home, context: context)` returns the dashboard component. Render it from a host view. The header component receives `context:`. Site logo, account menu, and top navigation stay in the host layout.
 
-A row heading is the section title and an optional action. It does not render a subtitle. The action is a small Flatpack default button. Keep it outside `.fp-on-backdrop` so the filled pill keeps dark type. The dashboard stack uses `gap-12` between rows. The gap from a row title to its widgets stays small. Registering an `action:` is not enough. The composer keeps that button only when a widget in the row returns `truncated: true` from `prepare`.
+A row heading is the section title, any visible `buttons:`, and an optional action. It does not render a subtitle. Each button and the action are small Flatpack default buttons. Keep that group outside `.fp-on-backdrop` so the filled pills keep dark type. The dashboard stack uses `gap-12` between rows. The gap from a row title to its widgets stays small. Registering an `action:` is not enough. The composer keeps that button only when a widget in the row returns `truncated: true` from `prepare`. Heading buttons render in declared order, then the action. They stay on the heading when the list is not truncated. A button `visible_if` uses the same symbol or callable as a row. False hides that button only.
+
+```ruby
+row :activity, title: "Recent activity",
+    action: { label: "View all", url: "/kits" },
+    buttons: [{ label: "New", url: "/kits/new", icon: "plus", method: :post, visible_if: :can_add? }] do
+  widget :recent_press_kits, span: 12, config: { limit: 10, display: :carousel }
+end
+```
+
+`label` and `url` are required. `icon` and `method` are optional. `method` is `:get`, `:post`, `:put`, `:patch`, or `:delete`. A layout hash uses the same fields with string keys. `buttons` must be a list. An unknown `method` raises `ArgumentError` when the dashboard is defined.
 
 Two different widget types can share a row. Each placement has a stable id. The id defaults to the widget type id, and a second placement of the same type sets its own id.
 

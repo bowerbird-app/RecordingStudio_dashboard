@@ -19,7 +19,7 @@ Dashboard
 
 Flatpack draws cards, grids, carousels, empty states, and alerts. This gem decides which placements remain and how wide they are.
 
-A row heading is the section title and an optional action. It does not render a subtitle. The composer keeps a registered action only when any laid widget's preparation is truncated. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid. The dashboard stack uses Tailwind `gap-12` between the header and each row. The header and the section title use `.fp-on-backdrop` so page text follows a layout photo. The action is a small Flatpack default button and stays outside that class. Default button text aliases `--surface-content-color`, which the class retargets, so a filled pill inside it would paint light type on a light fill. The widget grid does not use the class, so cards and other widget text keep their own color.
+A row heading is the section title, any visible heading buttons, and an optional action. It does not render a subtitle. The composer keeps a registered action only when any laid widget's preparation is truncated. Heading buttons stay in declared order, to the left of that action, unless a button's own `visible_if` is false. The title uses Flatpack section title spacing `:none`, and the row uses a small gap above the widget grid. The dashboard stack uses Tailwind `gap-12` between the header and each row. The header and the section title use `.fp-on-backdrop` so page text follows a layout photo. The action and the heading buttons are small Flatpack default buttons and stay outside that class, in one group with the same gap. Default button text aliases `--surface-content-color`, which the class retargets, so a filled pill inside it would paint light type on a light fill. The widget grid does not use the class, so cards and other widget text keep their own color.
 
 ## Render order
 
@@ -97,7 +97,7 @@ The overview and the checklist are different types. Their components do not shar
 
 `visible_if :onboarding_incomplete?` calls that method on the context. A proc is called with the context. False removes the placement from the row.
 
-A row `visible_if` that is false removes the row, its heading, and its action. Placements in that row are not prepared.
+A row `visible_if` that is false removes the row, its heading, its buttons, and its action. Placements in that row are not prepared. A heading button `visible_if` hides that button and leaves the rest of the row.
 
 ## Empty state
 
@@ -140,4 +140,4 @@ A custom `Policy` may turn individual flags on. `Policy.resolve` accepts `:fixed
 
 Unknown `config` keys raise `ArgumentError` at registration time. A span outside `supported_spans` raises too.
 
-`Preparation` states are `:content`, `:empty`, `:loading`, and `:error`. `Preparation.content(data, truncated: true)` marks a list that has more items than the widget showed. `truncated` defaults to false. Empty, loading, and error are never truncated. Not permitted and not applicable never become preparations. Those placements are omitted before `prepare`. A row `action` stays only when a remaining widget is truncated.
+`Preparation` states are `:content`, `:empty`, `:loading`, and `:error`. `Preparation.content(data, truncated: true)` marks a list that has more items than the widget showed. `truncated` defaults to false. Empty, loading, and error are never truncated. Not permitted and not applicable never become preparations. Those placements are omitted before `prepare`. A row `action` stays only when a remaining widget is truncated. Heading `buttons` stay whether or not a widget is truncated.

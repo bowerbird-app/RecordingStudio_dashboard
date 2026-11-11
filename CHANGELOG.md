@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.0] - 2026-11-11
+
+### Added
+
+- A row accepts `buttons:`, a list of heading buttons. Each button needs `label` and `url`. Optional keys are `icon`, `method` (`:get`, `:post`, `:put`, `:patch`, or `:delete`), and `visible_if`. The buttons render in declared order, immediately left of the view-more action. They show when no widget is truncated. A false `visible_if` hides that button. The same list is accepted from the Ruby DSL and from `definition_from_layout` string keys.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.4.0`. Existing rows stay the same until a host adds `buttons:`. Do not rerun the install generator.
+
 ## [0.3.0] - 2026-11-11
 
 ### Changed
