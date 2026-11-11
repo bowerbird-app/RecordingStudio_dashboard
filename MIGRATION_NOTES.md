@@ -9,6 +9,8 @@
 - FlatPack dummy tag `v0.1.341` (`>= 0.1.331`, `< 0.2` in the gemspec)
 
 Dashboard headers and section titles use Flatpack `.fp-on-backdrop`, which ships in `0.1.327`. Row actions are default buttons and stay outside that class. A registered row action shows only when a widget `prepare` returns `Preparation.content(..., truncated: true)`. Reload Flatpack CSS after the bump. Do not rebuild Tailwind for this class. Do not rerun the install generator.
+
+From `0.3.0`, integer spans 4-6 are full width on phones. Pin `recording_studio_dashboard` to `0.3.0`. Existing `span: 6` placements do not need a registration change. Pass a span hash only when a placement must keep a different phone width.
 - Public RubyGems and GitHub access for dependency installation
 
 ## Verification

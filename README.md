@@ -109,6 +109,20 @@ row :vacant, title: "Needs content", empty: { policy: :message, message: "This s
 end
 ```
 
+## Width
+
+An integer `span:` is a 12-column width. The grid map turns that into a Flatpack `span:` hash. Spans 4, 5, and 6 fill the two base tracks, so they are full width on phones and keep their `md` / `lg` widths. Spans 1-3 stay one of two tracks at base. Spans 7-12 already use `base: 2`.
+
+A placement may pass a hash instead:
+
+```ruby
+widget :press_center_overview, span: { base: 2, lg: 6 }
+```
+
+Keys must be Flatpack Grid breakpoints (`base`, `sm`, `md`, `lg`, `xl`). Each value must fit that breakpoint's track count on `cols: 12` (base and `sm` are 1-2, `md` is 1-4, `lg` and `xl` are 1-12). A valid hash goes to `grid.with_item(span:)` as written. A bad key or value raises `ArgumentError` when the dashboard is defined.
+
+Collapse math and `data-dashboard-span` use the `:lg` value, or the largest value when `:lg` is missing. `:expand` that still has leftover columns writes integer spans. `:preserve` and rows that already fill 12 keep a hash as configured.
+
 ## Width after a widget leaves
 
 `collapse: :expand` is the default. Remaining widgets share the freed columns, up to 12. `collapse: :preserve` keeps each configured span. Spans that already sum to 12 stay as configured.
@@ -141,6 +155,8 @@ If `setup` is hidden, `profile` renders at span 12.
 - `/dashboards/personalised` stores a hide override for the checklist.
 - `/dashboards/restricted` denies the metric permission before `prepare`.
 - `/studio_boards/:id` renders a user-created board from its layout.
+
+Phone and desktop captures of the home board, including a span 6 widget, live in `docs/recording_studio_dashboard/screenshots/`.
 
 Open port 3000 after the Cloud Agent setup in `.cursor/`. Dummy credentials use the shared RecordingStudio development master key.
 

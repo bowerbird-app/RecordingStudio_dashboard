@@ -4,7 +4,7 @@ require "test_helper"
 
 class RecordingStudioDashboardTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.2.1", ::RecordingStudioDashboard::VERSION
+    assert_equal "0.3.0", ::RecordingStudioDashboard::VERSION
   end
 
   def test_dummy_generated_artifacts_are_gitignored_and_untracked
@@ -72,6 +72,12 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes row, "safe_join(@row.widgets.map"
     refute_includes frame, "SPAN_CLASSES"
     refute_includes frame, "col-span-2 md:col-span-3 lg:col-span-7"
+    assert_includes frame, "lg:col-span-6"
+    assert_includes frame, "lg:grid-cols-12"
+    assert_includes frame, "4 => { base: 2, md: 2, lg: 4 }"
+    assert_includes frame, "6 => { base: 2, md: 2, lg: 6 }"
+    assert_includes frame, "3 => { base: 1, md: 1, lg: 3 }"
+    assert_includes frame, "12 => { base: 2, md: 4, lg: 12 }"
     assert_includes frame, "7 => { base: 2, md: 3, lg: 7 }"
     refute_includes frame, "span: 7"
     assert_includes frame, "def call\n      body"
