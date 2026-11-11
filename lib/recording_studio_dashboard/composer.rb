@@ -58,8 +58,12 @@ module RecordingStudioDashboard
       laid = widgets.each_with_index.map { |widget, index| widget.with(span: spans.fetch(index)) }
       LaidRow.new(
         id: row.id, title: row.title, description: row.description, action: row_action(row, laid),
-        spacing: row.spacing, widgets: laid, empty_state: row.empty_state
+        buttons: visible_buttons(row), spacing: row.spacing, widgets: laid, empty_state: row.empty_state
       )
+    end
+
+    def visible_buttons(row)
+      row.buttons.select { |button| visible?(button.visible_if) }
     end
 
     def row_action(row, widgets)

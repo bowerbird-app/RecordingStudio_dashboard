@@ -4,7 +4,7 @@ require "test_helper"
 
 class RecordingStudioDashboardTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.3.0", ::RecordingStudioDashboard::VERSION
+    assert_equal "0.4.0", ::RecordingStudioDashboard::VERSION
   end
 
   def test_dummy_generated_artifacts_are_gitignored_and_untracked

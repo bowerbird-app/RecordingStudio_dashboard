@@ -19,11 +19,15 @@ module RecordingStudioDashboard
     private
 
     def heading
-      return if @row.title.blank? && @row.action.nil?
+      return unless heading?
 
       tag.div(class: "flex items-end justify-between gap-4") do
-        safe_join([title, action_link].compact)
+        safe_join([title, button_group].compact)
       end
+    end
+
+    def heading?
+      @row.title.present? || @row.action || @row.buttons.any?
     end
 
     def title
@@ -33,15 +37,27 @@ module RecordingStudioDashboard
                                                    class: "fp-on-backdrop mb-0 pb-0"))
     end
 
-    def action_link
-      return if @row.action.nil?
+    def button_group
+      parts = @row.buttons.map { |button| heading_button(button) }
+      parts << action_link if @row.action
+      return if parts.empty?
 
-      render(FlatPack::Button::Component.new(
-               text: @row.action.label,
-               href: @row.action.url,
-               style: :default,
-               size: :sm
-             ))
+      tag.div(class: "flex items-center gap-4") { safe_join(parts) }
+    end
+
+    def action_link
+      render_button(text: @row.action.label, href: @row.action.url)
+    end
+
+    def heading_button(button)
+      render_button(text: button.label, href: button.url, icon: button.icon, http_method: button.http_method)
+    end
+
+    def render_button(text:, href:, icon: nil, http_method: nil)
+      options = { text: text, href: href, style: :default, size: :sm }
+      options[:icon] = icon if icon
+      options[:method] = http_method if http_method
+      render(FlatPack::Button::Component.new(**options))
     end
 
     def body

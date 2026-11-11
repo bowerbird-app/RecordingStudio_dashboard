@@ -48,7 +48,9 @@ RecordingStudioDashboard.register(:home) do
   end
 
   row :activity, title: "Recent activity",
-      action: { label: "View all", url: "/dashboards/carousel" }, visible_if: :show_activity? do
+      action: { label: "View all", url: "/dashboards/carousel" },
+      buttons: [{ label: "New", url: "/dashboards/expanded" }],
+      visible_if: :show_activity? do
     widget :recent_items, span: 12, config: { limit: 3, display: :grid }
   end
 

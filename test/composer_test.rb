@@ -316,6 +316,149 @@ class ComposerTest < Minitest::Test
     assert_empty row.widgets
   end
 
+  def test_heading_buttons_stay_when_nothing_is_truncated
+    definition = RecordingStudioDashboard.register(:buttons) do
+      row :activity, title: "Recent activity",
+                     action: { label: "View all", url: "/all" },
+                     buttons: [{ label: "New", url: "/new" }] do
+        widget :metric, id: :recent, config: { name: "recent", value: [1] }
+      end
+    end
+    row = compose(definition).rows.first
+
+    assert_nil row.action
+    assert_equal ["New"], row.buttons.map(&:label)
+    assert_equal ["/new"], row.buttons.map(&:url)
+  end
+
+  def test_heading_buttons_keep_declared_order_when_the_action_shows
+    definition = RecordingStudioDashboard.register(:ordered) do
+      row :activity, title: "Recent activity",
+                     action: { label: "View all", url: "/all" },
+                     buttons: [{ label: "New", url: "/new" }, { label: "Edit", url: "/edit" }] do
+        widget :metric, id: :recent, config: { name: "recent", value: [1, 2], truncated: true }
+      end
+    end
+    row = compose(definition).rows.first
+
+    assert_equal "View all", row.action.label
+    assert_equal %w[New Edit], row.buttons.map(&:label)
+  end
+
+  def test_heading_button_visible_if_hides_that_button_only
+    @context = Context.new(show_setup: false)
+    definition = RecordingStudioDashboard.register(:gated_buttons) do
+      row :activity, title: "Recent activity",
+                     buttons: [
+                       { label: "New", url: "/new" },
+                       { label: "Archive", url: "/old", visible_if: :show_setup? }
+                     ] do
+        widget :metric, id: :recent, config: { name: "recent", value: [1] }
+      end
+    end
+    row = compose(definition).rows.first
+
+    assert_equal ["New"], row.buttons.map(&:label)
+  end
+
+  def test_layout_hash_accepts_heading_buttons
+    definition = RecordingStudioDashboard.definition_from_layout(
+      "board-buttons",
+      { "rows" => [{
+        "id" => "saved",
+        "title" => "Saved",
+        "buttons" => [{
+          "label" => "New",
+          "url" => "/new",
+          "icon" => "plus",
+          "method" => "post",
+          "visible_if" => "show_setup?"
+        }],
+        "placements" => [{
+          "id" => "saved_downloads", "widget" => "metric", "span" => 12,
+          "config" => { "name" => "saved", "value" => 7 }
+        }]
+      }] }
+    )
+    button = compose(definition).rows.first.buttons.first
+
+    assert_equal "New", button.label
+    assert_equal "/new", button.url
+    assert_equal "plus", button.icon
+    assert_equal :post, button.http_method
+    assert_equal :show_setup?, button.visible_if
+  end
+
+  def test_layout_hash_hides_a_heading_button_whose_predicate_is_false
+    @context = Context.new(show_setup: false)
+    definition = RecordingStudioDashboard.definition_from_layout(
+      "board-hidden-button",
+      { "rows" => [{
+        "id" => "saved",
+        "buttons" => [{ "label" => "Archive", "url" => "/old", "visible_if" => "show_setup?" }],
+        "placements" => [{
+          "id" => "saved_downloads", "widget" => "metric", "span" => 12,
+          "config" => { "name" => "saved", "value" => 7 }
+        }]
+      }] }
+    )
+
+    assert_empty compose(definition).rows.first.buttons
+  end
+
+  def test_heading_button_keeps_a_predicate_and_drops_a_blank_icon
+    visible = lambda(&:show_setup?)
+    ready = RecordingStudioDashboard::HeadingButton.new(
+      label: "Kept", url: "/kept", icon: nil, http_method: nil, visible_if: nil
+    )
+    definition = RecordingStudioDashboard.register(:shaped) do
+      row :activity, buttons: [ready, { label: "New", url: "/new", icon: "", visible_if: visible }] do
+        widget :metric, id: :recent, config: { name: "recent", value: [1] }
+      end
+    end
+    buttons = compose(definition).rows.first.buttons
+
+    assert_equal %w[Kept New], buttons.map(&:label)
+    assert_nil buttons.last.icon
+    assert_equal visible, buttons.last.visible_if
+  end
+
+  def test_heading_button_requires_a_label_and_a_url
+    error = assert_raises(ArgumentError) do
+      RecordingStudioDashboard.register(:blank_button) do
+        row :activity, buttons: [{ url: "/new" }] do
+          widget :metric, id: :recent, config: { name: "recent", value: [1] }
+        end
+      end
+    end
+
+    assert_match(/unknown button/, error.message)
+  end
+
+  def test_unknown_heading_button_method_raises
+    error = assert_raises(ArgumentError) do
+      RecordingStudioDashboard.register(:bad_method) do
+        row :activity, buttons: [{ label: "New", url: "/new", method: :foo }] do
+          widget :metric, id: :recent, config: { name: "recent", value: [1] }
+        end
+      end
+    end
+
+    assert_match(/unknown method :foo/, error.message)
+  end
+
+  def test_heading_buttons_must_be_a_list
+    error = assert_raises(ArgumentError) do
+      RecordingStudioDashboard.register(:bad_buttons) do
+        row :activity, buttons: { label: "New", url: "/new" } do
+          widget :metric, id: :recent, config: { name: "recent", value: [1] }
+        end
+      end
+    end
+
+    assert_match(/unknown buttons/, error.message)
+  end
+
   def test_overrides_store_only_the_delta
     overrides = RecordingStudioDashboard::Overrides.parse("hidden_placements" => ["setup"])
 
