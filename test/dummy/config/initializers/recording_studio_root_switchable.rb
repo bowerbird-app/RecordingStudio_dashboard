@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 RecordingStudioRootSwitchable.configure do |config|
+  # The switcher resolves its actor before the host sets Current.actor.
+  # Prefer the signed-in user so a leftover Current.actor cannot hide them.
   config.current_actor_resolver = lambda do |controller:|
-    Current.actor || controller.current_user
+    signed_in = controller.current_user if controller.respond_to?(:current_user)
+    signed_in.presence || Current.actor
   end
 
   # Mounted switcher pages use the same shell as the rest of the dummy.
@@ -29,12 +32,21 @@ RecordingStudioRootSwitchable.configure do |config|
   config.scope :all_workspaces do |scope|
     scope.label = "All workspaces"
     scope.description = "Every workspace root in the dummy app."
-    scope.available_roots = lambda do |**|
+    scope.available_roots = lambda do |actor: nil, **|
+      next [] if actor.blank?
+
       Workspace.order(:name).filter_map do |workspace|
-        RecordingStudio.root_recording_for(workspace)
+        recording = RecordingStudio::Recording.find_by(recordable: workspace)
+        next unless RecordingStudio.root_recording?(recording)
+        next unless RecordingStudioAccessible.authorized?(actor: actor, recording: recording, role: :view)
+
+        recording
       end
     end
-    scope.access_check = ->(**) { true }
+    scope.access_check = lambda do |actor: nil, recording: nil, **|
+      actor.present? && recording.present? &&
+        RecordingStudioAccessible.authorized?(actor: actor, recording: recording, role: :view)
+    end
 
     scope.default_root = lambda do |roots:, **|
       roots.first

@@ -27,7 +27,7 @@ class RootSwitchDropdownTest < ActionDispatch::IntegrationTest
     sign_in user
 
     workspace = Workspace.create!(name: "Dropdown Workspace")
-    RecordingStudio.root_recording_for(workspace)
+    grant_owner!(user, workspace)
 
     get root_path
 
@@ -49,7 +49,7 @@ class RootSwitchDropdownTest < ActionDispatch::IntegrationTest
 
     get "/recording_studio_root_switchable/v1/root_switch?scope=all_workspaces"
 
-    assert_response :success
+    assert_response :success, root_switch_denial_detail
     assert_select "body[data-recording-studio-default-layout='true']", count: 1
     refute_includes response.body, "flat-pack-sidebar-layout"
   end
@@ -75,7 +75,7 @@ class RootSwitchDropdownTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to "/docs/install"
+    assert_redirected_to "/docs/install", root_switch_denial_detail
   end
 
   test "switching falls back to home when return_to is not a valid internal route" do
@@ -99,10 +99,16 @@ class RootSwitchDropdownTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to "/"
+    assert_redirected_to "/", root_switch_denial_detail
   end
 
   private
+
+  def root_switch_denial_detail
+    actor = RecordingStudio::RootSwitchable::Current.actor
+    root = RecordingStudio::RootSwitchable.current_root_recording
+    "actor=#{actor.try(:email) || actor.class} root=#{root&.id}"
+  end
 
   def grant_owner!(user, workspace)
     recording = RecordingStudio.root_recording_for(workspace)
