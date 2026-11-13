@@ -31,11 +31,22 @@ page = Page.find_or_create_by!(title: "Getting Started")
 previous_actor = Current.actor
 Current.actor = user
 
+ensure_owner = lambda do |recording|
+  result = RecordingStudioAccessible.bootstrap_owner_access!(recording: recording, actor: user)
+  raise result.error if result.failure?
+
+  result
+end
+
 begin
   # Create the root recording
   root_recording = RecordingStudio.root_recording_for(workspace)
   accessible_root_recording = RecordingStudio.root_recording_for(accessible_workspace)
   private_root_recording = RecordingStudio.root_recording_for(private_workspace)
+
+  ensure_owner.call(root_recording)
+  ensure_owner.call(accessible_root_recording)
+  ensure_owner.call(private_root_recording)
 
   folder_recording = find_or_record_child.call(folder, root_recording, root_recording)
 

@@ -192,15 +192,18 @@ The `recording_studio_dashboard` helper provides access to all engine routes.
 
 ## RecordingStudio Host-App Check
 
-This template's dummy app uses RecordingStudio `v6.3.0` (`~> 6.0, >= 6.2` in the gemspec). Keep
+This template's dummy app uses RecordingStudio `v6.7.0` (`~> 6.0, >= 6.2` in the gemspec). Keep
 `config.require_recordable_declarations = true`, declare every configured recordable with
 `recording_studio_recordable(...)`, and create roots with `RecordingStudio.root_recording_for(recordable)`.
-Child recordings must be created with an explicit `parent_recording`.
+Child recordings must be created with an explicit `parent_recording`. Recording Studio `6.5` and newer
+needs `config.authorize_write`. The dummy allows writes when the actor has an Accessible `:edit` grant
+on the root. Access-grant writes also allow Accessible's access-creation context, or an `:admin` grant.
+Seeds bootstrap the owner before they record children.
 
-When Accessible is bundled, pin the dummy or host Gemfile to `v0.24.0`, pin
-`recording_studio_trashable` to `v0.12.2` with `require: false` (Accessible loads the
+When Accessible is bundled, pin the dummy or host Gemfile to `v0.31.0`, pin
+`recording_studio_trashable` to `v0.14.0` with `require: false` (Accessible loads the
 query helpers only), run `bin/rails generate recording_studio_accessible:migrations`,
-migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.341`). Accessible `0.11.0+`
+migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.356`). Accessible `0.11.0+`
 stores access roles as strings (`view` / `edit` / `admin`); hosts upgrading past that
 release need the role-column migration. Accessible `0.14.0+` adds access constraint and
 access rule tables for optional action audiences; English hosts need no copy changes for

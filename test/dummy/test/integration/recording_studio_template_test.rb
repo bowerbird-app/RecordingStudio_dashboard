@@ -22,6 +22,7 @@ class RecordingStudioTemplateTest < ActiveSupport::TestCase
     connection = ActiveRecord::Base.connection
 
     assert connection.column_exists?(:recording_studio_recordings, :root_recording_id)
+    assert connection.column_exists?(:recording_studio_recordings, :purge_at)
     assert connection.table_exists?(:recording_studio_accesses)
     assert connection.table_exists?(:recording_studio_access_constraints)
     assert connection.table_exists?(:recording_studio_access_rules)
@@ -54,6 +55,10 @@ class RecordingStudioTemplateTest < ActiveSupport::TestCase
     assert_equal folder_recording, page_recording.parent_recording
     assert_equal root_recording, page_recording.root_recording
     assert_equal 3, Workspace.count
+    owner = User.find_by!(email: "admin@admin.com")
+    assert RecordingStudioAccessible.authorized?(actor: owner, recording: root_recording, role: :edit)
+    assert RecordingStudioAccessible.authorized?(actor: owner, recording: accessible_root_recording, role: :edit)
+    assert RecordingStudioAccessible.authorized?(actor: owner, recording: private_root_recording, role: :edit)
 
     assert_no_difference -> { User.count } do
       assert_no_difference -> { RecordingStudio::Recording.count } do
