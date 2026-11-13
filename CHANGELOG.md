@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.4.1] - 2026-11-13
+
+### Changed
+
+- `flat_pack` is `>= 0.1.331`, `< 1.0`. Later `0.x` releases can resolve. The floor stays `0.1.331`.
+- `recording_studio` is `~> 6.0`, `>= 6.2`. The 6.2 floor stays. The upper bound stays below `7.0`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.4.1`. Hosts on Recording Studio `6.2` or newer in `6.x`, and Flatpack `0.1.331` through `0.x`, can resolve. Dummy GitHub tags stay `v6.3.0` and `v0.1.341`. Do not rerun the install generator.
+
 ## [0.4.0] - 2026-11-11
 
 ### Added
