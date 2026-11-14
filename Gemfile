@@ -6,9 +6,9 @@ source "https://rubygems.org"
 gemspec
 
 # These gems are not published to RubyGems; resolve the gemspec pins from GitHub.
-gem "flat_pack", github: "bowerbird-app/flatpack", tag: "v0.1.366"
+gem "flat_pack", github: "bowerbird-app/flatpack", tag: "v0.1.374"
 gem "rack", ">= 3.2.8"
-gem "recording_studio", github: "bowerbird-app/RecordingStudio", tag: "v6.10.0"
+gem "recording_studio", github: "bowerbird-app/RecordingStudio", tag: "v6.14.0"
 gem "view_component", "4.20.0"
 
 gem "devise"
