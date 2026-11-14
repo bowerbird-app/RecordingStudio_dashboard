@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.2] - 2026-11-14
+
+### Changed
+
+- `recording_studio` is `>= 7.0`, `< 8.0`.
+- Development and dummy GitHub tags are Recording Studio `v7.0.0`, Flatpack `v0.1.376`, Accessible `v0.43.0`, and Trashable `v0.16.0`. Root Switchable stays `v0.15.0`, Metrics stays `v0.8.0`, and Cache stays `v0.6.3`.
+- Dummy seeds create roots with `RecordingStudio.create_root_recording!`. `root_recording_for` only looks a root up.
+- Dummy `authorize_write` allows a persisted user to create a root. Later writes still need an Accessible grant.
+- Dummy seeds look up kept child recordings with `Recording.kept`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.4.2` and Recording Studio to `7.x` (`v7.0.0`).
+- Call `create_root_recording!(recordable, actor:)` where a host used `root_recording_for` to create a root. Lookup sites stay on `root_recording_for` and handle `nil`.
+- Allow root creation in `authorize_write` when `root_recording` is nil. Core 7 authorizes that write.
+- No new Recording Studio migration for this split. Do not rerun the install generator.
+
 ## [0.4.1] - 2026-11-13
 
 ### Changed
