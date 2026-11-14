@@ -23,6 +23,8 @@ class RecordingStudioTemplateTest < ActiveSupport::TestCase
 
     assert connection.column_exists?(:recording_studio_recordings, :root_recording_id)
     assert connection.column_exists?(:recording_studio_recordings, :purge_at)
+    assert connection.column_exists?(:recording_studio_events, :root_recording_id)
+    assert_not connection.column_exists?(:recording_studio_events, :root_recording_id, null: true)
     assert connection.table_exists?(:recording_studio_accesses)
     assert connection.table_exists?(:recording_studio_access_constraints)
     assert connection.table_exists?(:recording_studio_access_rules)
