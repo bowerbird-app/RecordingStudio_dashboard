@@ -10,6 +10,7 @@
 - Seeds, docs tests, declaration tests, and the root switch test create roots with `RecordingStudio.create_root_recording!`. `root_recording_for` only finds a root and returns `nil` when there is none.
 - The dummy `authorize_write` policy allows a persisted user to create a root recordable. Later writes still need an Accessible grant.
 - Seeds look up an existing child with `Recording.kept`.
+- Dummy lock updates `msgpack` to `1.8.7` (CVE-2026-126366).
 
 ### Upgrade
 
