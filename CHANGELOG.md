@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.5.0] - 2026-11-15
+
+### Changed
+
+- `recording_studio` is `>= 7.0`, `< 8.0`. Development and dummy Gemfiles pin GitHub tag `v7.0.0`.
+- Dummy addon pins that accept core 7 stay in place: Accessible `v0.43.1`, Trashable `v0.16.1` (`require: false`), Root Switchable `v0.15.1`. Metrics stays `v0.8.0`. Cache stays `v0.6.3`. Flatpack stays `v0.1.366`.
+- `flat_pack` stays `>= 0.1.331`, `< 1.0`. `rails` stays `~> 8.1.0`. No dependency uses a `~> 0.x.y` cap.
+- Seeds, docs tests, declaration tests, and the root switch test create roots with `RecordingStudio.create_root_recording!`. `root_recording_for` only finds a root and returns `nil` when there is none.
+- The dummy `authorize_write` policy allows a persisted user to create a root recordable. Later writes still need an Accessible grant.
+- Seeds look up an existing child with `Recording.kept`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.5.0` and Recording Studio to `7.0` or newer below `8.0`. Hosts still on `6.x` cannot resolve this release.
+- Replace `root_recording_for` calls that created a root with `create_root_recording!(recordable, actor:)`. Keep `root_recording_for` for lookup and handle `nil`.
+- Allow `authorize_write` when `root_recording` is nil and the recordable is a root type. Core 7 authorizes that write before the root row exists.
+- When Accessible is bundled, use a release that accepts Recording Studio 7. The dummy pins Accessible `v0.43.1`, Trashable `v0.16.1`, and Root Switchable `v0.15.1`.
+- Do not rerun the install generator. This release adds no migration.
+
 ## [0.4.2] - 2026-11-15
 
 ### Changed
