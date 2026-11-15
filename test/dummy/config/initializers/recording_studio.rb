@@ -16,9 +16,11 @@ RecordingStudio.configure do |config|
   # Recording Studio 6.5+ refuses writes until this is set. A signed-in user
   # is not a policy. Access grants go through Accessible's creation context,
   # the same path as bootstrap_owner_access! and grant_access.
+  # create_root_recording! authorizes before a root row exists, so that write
+  # arrives with a nil root. A persisted user may start a root recordable.
   config.authorize_write = lambda { |actor:, root_recording:, recordable:, **|
     next false unless actor.is_a?(User) && actor.persisted?
-    next false unless root_recording
+    next RecordingStudio.root_allowed?(recordable) if root_recording.nil?
 
     if defined?(RecordingStudio::Access) && recordable.is_a?(RecordingStudio::Access)
       next true if RecordingStudioAccessible::AccessCreationContext.allowed?
