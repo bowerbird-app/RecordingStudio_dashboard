@@ -3,7 +3,7 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 find_or_record_child = lambda do |recordable, root_recording, parent_recording|
-  RecordingStudio::Recording.kept.find_by(
+  RecordingStudio::Recording.where(RecordingStudio::Recording.recording_studio_trashable_kept_sql).find_by(
     root_recording: root_recording,
     parent_recording: parent_recording,
     recordable: recordable
@@ -40,9 +40,9 @@ end
 
 begin
   # Create the root recording
-  root_recording = RecordingStudio.create_root_recording!(workspace, actor: user)
-  accessible_root_recording = RecordingStudio.create_root_recording!(accessible_workspace, actor: user)
-  private_root_recording = RecordingStudio.create_root_recording!(private_workspace, actor: user)
+  root_recording = RecordingStudio.root_recording_for(workspace)
+  accessible_root_recording = RecordingStudio.root_recording_for(accessible_workspace)
+  private_root_recording = RecordingStudio.root_recording_for(private_workspace)
 
   ensure_owner.call(root_recording)
   ensure_owner.call(accessible_root_recording)

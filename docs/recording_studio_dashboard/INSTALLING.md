@@ -192,21 +192,18 @@ The `recording_studio_dashboard` helper provides access to all engine routes.
 
 ## RecordingStudio Host-App Check
 
-This template's dummy app uses RecordingStudio `v7.0.0` (`>= 7.0`, `< 8.0` in the gemspec). Keep
+This template's dummy app uses RecordingStudio `v6.10.0` (`~> 6.0, >= 6.2` in the gemspec). Keep
 `config.require_recordable_declarations = true`, declare every configured recordable with
-`recording_studio_recordable(...)`, and create roots with
-`RecordingStudio.create_root_recording!(recordable, actor:)`.
-`RecordingStudio.root_recording_for(recordable)` only finds a root and returns `nil` when there is none.
+`recording_studio_recordable(...)`, and create roots with `RecordingStudio.root_recording_for(recordable)`.
 Child recordings must be created with an explicit `parent_recording`. Recording Studio `6.5` and newer
-needs `config.authorize_write`. Core 7 calls that proc with a nil root when creating one. The dummy
-allows a persisted user to create a root, then allows writes when the actor has an Accessible `:edit`
-grant on the root. Access-grant writes also allow Accessible's access-creation context, or an `:admin`
-grant. Seeds bootstrap the owner before they record children.
+needs `config.authorize_write`. The dummy allows writes when the actor has an Accessible `:edit` grant
+on the root. Access-grant writes also allow Accessible's access-creation context, or an `:admin` grant.
+Seeds bootstrap the owner before they record children.
 
-When Accessible is bundled, pin the dummy or host Gemfile to `v0.43.0`, pin
-`recording_studio_trashable` to `v0.16.0` with `require: false` (Accessible loads the
+When Accessible is bundled, pin the dummy or host Gemfile to `v0.37.0`, pin
+`recording_studio_trashable` to `v0.14.1` with `require: false` (Accessible loads the
 query helpers only), run `bin/rails generate recording_studio_accessible:migrations`,
-migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.376`). Recording Studio
+migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.366`). Recording Studio
 `6.9` stores `root_recording_id` on `recording_studio_events`. Copy core migration
 `20261114090000_add_root_recording_id_to_recording_studio_events` before writing events.
 Accessible `0.11.0+`

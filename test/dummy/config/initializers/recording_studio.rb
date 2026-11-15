@@ -14,13 +14,11 @@ RecordingStudio.configure do |config|
   config.actor = -> { Current.actor }
 
   # Recording Studio 6.5+ refuses writes until this is set. A signed-in user
-  # is not a policy for an existing root. Core 7 authorizes root creation with
-  # a nil root, so a persisted user may create one. Later writes still need a
-  # grant. Access grants go through Accessible's creation context, the same
-  # path as bootstrap_owner_access! and grant_access.
+  # is not a policy. Access grants go through Accessible's creation context,
+  # the same path as bootstrap_owner_access! and grant_access.
   config.authorize_write = lambda { |actor:, root_recording:, recordable:, **|
     next false unless actor.is_a?(User) && actor.persisted?
-    next true if root_recording.nil?
+    next false unless root_recording
 
     if defined?(RecordingStudio::Access) && recordable.is_a?(RecordingStudio::Access)
       next true if RecordingStudioAccessible::AccessCreationContext.allowed?

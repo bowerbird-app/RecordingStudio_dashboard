@@ -15,4 +15,4 @@ The engine still loads host config in this order.
 3. `config.x.recording_studio_dashboard`
 4. The host initializer, which runs as part of normal Rails boot and can call `configure`
 
-The dummy app pins Recording Studio to GitHub tag `v7.0.0` and keeps `config.require_recordable_declarations = true`. `StudioBoard` declares `root: false` and `allowed_parent_types: ["Workspace"]`. `root_recording_for` only finds a root. Seeds create one with `create_root_recording!`. A persisted user may create a root; later writes still need an Accessible grant.
+The dummy app pins Recording Studio to GitHub tag `v6.10.0` and keeps `config.require_recordable_declarations = true`. `StudioBoard` declares `root: false` and `allowed_parent_types: ["Workspace"]`.
