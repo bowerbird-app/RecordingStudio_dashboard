@@ -4,7 +4,7 @@ require "test_helper"
 
 class RecordingStudioDashboardTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.4.1", ::RecordingStudioDashboard::VERSION
+    assert_equal "0.4.2", ::RecordingStudioDashboard::VERSION
   end
 
   def test_dummy_generated_artifacts_are_gitignored_and_untracked
@@ -38,7 +38,7 @@ class RecordingStudioDashboardTest < Minitest::Test
   def test_gemspec_pins_recording_studio_6_x_and_flat_pack_0_x
     gemspec = File.read(File.expand_path("../recording_studio_dashboard.gemspec", __dir__))
 
-    assert_includes gemspec, 'spec.add_dependency "recording_studio", "~> 6.0", ">= 6.2"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio", ">= 6.2", "< 8.0"'
     assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.331", "< 1.0"'
   end
 
