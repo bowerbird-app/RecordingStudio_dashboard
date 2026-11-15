@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.2] - 2026-11-15
+
+### Changed
+
+- Allow recording_studio < 8.0 (core 7 phase 1).
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.4.2`. Hosts on Recording Studio `6.2` through `7.x` can resolve. Dummy GitHub tags stay on core `6.x`. Do not rerun the install generator.
+
 ## [0.4.1] - 2026-11-13
 
 ### Changed
