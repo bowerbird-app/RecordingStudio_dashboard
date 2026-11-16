@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.5.1] - 2026-11-16
+
+### Changed
+
+- Development and dummy Gemfiles pin the latest GitHub release tags: Recording Studio `v7.3.0`, Flatpack `v0.1.377`, Accessible `v0.45.1`, Trashable `v1.0.0` (`require: false`), Root Switchable `v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`.
+- Gemspec ranges stay `recording_studio` `>= 7.0`, `< 8.0` and `flat_pack` `>= 0.1.331`, `< 1.0`. `rails` stays `~> 8.1.0`.
+- Root and dummy lockfiles move `puma` from `8.0.2` to `8.1.1`. `8.0.2` is covered by the Puma advisories fixed in `8.0.3`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.5.1`. Hosts on `0.5.0` keep the same gemspec ranges. No migration and no install-generator rerun.
+- Dummy and development GitHub tags move to the list above. Trashable `1.0.0` drops its own hook registry. This gem does not call that registry.
+- `puma` is the dummy server, not a runtime dependency. A host that vendors these lockfiles gets `8.1.1`.
+
 ## [0.5.0] - 2026-11-15
 
 ### Changed
