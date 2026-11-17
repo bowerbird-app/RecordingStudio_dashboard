@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Development and dummy Gemfiles pin the latest GitHub release tags: Recording Studio `v7.3.0`, Flatpack `v0.1.377`, Accessible `v0.45.1`, Trashable `v1.0.0` (`require: false`), Root Switchable `v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`.
+- Development and dummy Gemfiles pin the latest GitHub release tags: Recording Studio `v7.4.0`, Flatpack `v0.1.377`, Accessible `v0.45.1`, Trashable `v1.0.0` (`require: false`), Root Switchable `v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`.
 - Gemspec ranges stay `recording_studio` `>= 7.0`, `< 8.0` and `flat_pack` `>= 0.1.331`, `< 1.0`. `rails` stays `~> 8.1.0`.
 - Root and dummy lockfiles move `puma` from `8.0.2` to `8.1.1`. `8.0.2` is covered by the Puma advisories fixed in `8.0.3`.
 
