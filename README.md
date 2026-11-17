@@ -178,7 +178,7 @@ Open port 3000 after the Cloud Agent setup in `.cursor/`. Dummy credentials use 
 | Rails | 8.1+ |
 | PostgreSQL | 16 |
 | Tailwind CSS | 4 |
-| RecordingStudio | 7.0+ (`>= 7.0, < 8.0` in the gemspec; dummy GitHub tag `v7.3.0`) |
+| RecordingStudio | 7.0+ (`>= 7.0, < 8.0` in the gemspec; dummy GitHub tag `v7.4.0`) |
 | Accessible | dummy GitHub tag `v0.45.1` |
 | Trashable | dummy GitHub tag `v1.0.0` (`require: false`) |
 | Root Switchable | dummy GitHub tag `v0.16.0` |

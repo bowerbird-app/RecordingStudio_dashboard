@@ -4,7 +4,7 @@
 
 - Ruby 3.3 or newer
 - Rails 8.1 or newer
-- Recording Studio 7.0 or newer below 8.0 (`>= 7.0`, `< 8.0` in the gemspec; dummy GitHub tag `v7.3.0`)
+- Recording Studio 7.0 or newer below 8.0 (`>= 7.0`, `< 8.0` in the gemspec; dummy GitHub tag `v7.4.0`)
 - Accessible dummy tag `v0.45.1`, Trashable dummy tag `v1.0.0` (`require: false`), Root Switchable dummy tag `v0.16.0`, Metrics dummy tag `v0.9.0`, and Cache dummy tag `v0.7.0`
 - FlatPack `0.1.331` through `0.x` (`>= 0.1.331`, `< 1.0` in the gemspec; dummy GitHub tag `v0.1.377`)
 
@@ -16,7 +16,7 @@ From `0.4.0`, a row may set `buttons:` to a list of `{ label, url }` hashes. Opt
 
 From `0.5.0`, pin `recording_studio_dashboard` to `0.5.0` or newer below the next breaking release. The gemspec allows Flatpack `>= 0.1.331`, `< 1.0` and Recording Studio `>= 7.0`, `< 8.0`. Create a root with `RecordingStudio.create_root_recording!(recordable, actor:)`. `root_recording_for` only finds one.
 
-From `0.5.1`, the gemspec ranges stay the same. Development and dummy GitHub tags are Recording Studio `v7.3.0`, Flatpack `v0.1.377`, Accessible `v0.45.1`, Trashable `v1.0.0`, Root Switchable `v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`. No new migration.
+From `0.5.1`, the gemspec ranges stay the same. Development and dummy GitHub tags are Recording Studio `v7.4.0`, Flatpack `v0.1.377`, Accessible `v0.45.1`, Trashable `v1.0.0`, Root Switchable `v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`. Recording Studio `7.4.0` adds the index migration `20261116230000_add_recording_studio_recordings_root_type_creation_index` (`index_rs_recordings_on_root_type_created_at_id`). Hosts on `7.4.0` install and run core's migrations with `bin/rails recording_studio:install:migrations && bin/rails db:migrate`.
 
 Recording Studio `6.5` and newer refuses a write until `config.authorize_write` is set. The dummy policy allows an edit grant on the root, and an admin grant (or Accessible's access-creation context) when the recordable is an access grant. Seeds call `bootstrap_owner_access!` before child recordings. The mounted root switcher also requires an Accessible `:view` grant on the current root. Trashable `0.14.0` adds `purge_at` on `recording_studio_recordings`. Recording Studio `6.9` requires `root_recording_id` on `recording_studio_events`. The dummy copies `20261114090000_add_root_recording_id_to_recording_studio_events`. Run the dummy migrations after the pin bump.
 - Public RubyGems and GitHub access for dependency installation
