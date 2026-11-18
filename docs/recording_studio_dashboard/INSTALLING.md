@@ -202,8 +202,8 @@ has a nil `root_recording`. The dummy allows a persisted user to create a root r
 writes when the actor has an Accessible `:edit` grant on the root. Access-grant writes also allow
 Accessible's access-creation context, or an `:admin` grant. Seeds bootstrap the owner before they record children.
 
-When Accessible is bundled, the dummy pins Accessible `v0.54.0`, Trashable `v1.2.0`
-with `require: false` (Accessible loads the query helpers only), Root Switchable
+When Accessible is bundled, the dummy pins Accessible `v0.54.0` and Trashable `v1.2.0`
+with `require: false`. The dummy bundles Trashable directly. Accessible 0.54 does not require it. Root Switchable
 `v0.16.0`, Metrics `v0.9.1`, and Cache `v0.7.0`. Run
 `bin/rails generate recording_studio_accessible:migrations`,
 migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.378`). Recording Studio
