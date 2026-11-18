@@ -192,7 +192,7 @@ The `recording_studio_dashboard` helper provides access to all engine routes.
 
 ## RecordingStudio Host-App Check
 
-This template's dummy app uses RecordingStudio `v7.4.0` (`>= 7.0`, `< 8.0` in the gemspec). Keep
+This template's dummy app uses RecordingStudio `v7.7.1` (`>= 7.0`, `< 8.0` in the gemspec). Keep
 `config.require_recordable_declarations = true`, declare every configured recordable with
 `recording_studio_recordable(...)`, and create roots with `RecordingStudio.create_root_recording!(recordable, actor:)`.
 `RecordingStudio.root_recording_for` only finds a root and returns `nil` when that recordable has none.
@@ -202,11 +202,11 @@ has a nil `root_recording`. The dummy allows a persisted user to create a root r
 writes when the actor has an Accessible `:edit` grant on the root. Access-grant writes also allow
 Accessible's access-creation context, or an `:admin` grant. Seeds bootstrap the owner before they record children.
 
-When Accessible is bundled, the dummy pins Accessible `v0.45.1`, Trashable `v1.0.0`
-with `require: false` (Accessible loads the query helpers only), Root Switchable
-`v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`. Run
+When Accessible is bundled, the dummy pins Accessible `v0.54.0` and Trashable `v1.2.0`
+with `require: false`. The dummy bundles Trashable directly. Accessible 0.54 does not require it. Root Switchable
+`v0.16.0`, Metrics `v0.9.1`, and Cache `v0.7.0`. Run
 `bin/rails generate recording_studio_accessible:migrations`,
-migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.377`). Recording Studio
+migrate, and rebuild Tailwind after bumping FlatPack (`v0.1.378`). Recording Studio
 `6.9` stores `root_recording_id` on `recording_studio_events`. Copy core migration
 `20261114090000_add_root_recording_id_to_recording_studio_events` before writing events.
 Accessible `0.11.0+`
