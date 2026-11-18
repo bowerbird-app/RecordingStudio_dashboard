@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.2] - 2026-11-18
+
+### Changed
+
+- Development and dummy Gemfiles pin the latest GitHub release tags: Recording Studio `v7.7.1`, Flatpack `v0.1.378`, Accessible `v0.54.0`, Trashable `v1.2.0` (`require: false`), Root Switchable `v0.16.0`, Metrics `v0.9.1`, and Cache `v0.7.0`.
+- Gemspec ranges stay `recording_studio` `>= 7.0`, `< 8.0` and `flat_pack` `>= 0.1.331`, `< 1.0`. `rails` stays `~> 8.1.0`.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.5.2`. Hosts on `0.5.1` keep the same gemspec ranges. No migration and no install-generator rerun.
+- Dummy and development GitHub tags move to the list above. Hosts that install Recording Studio themselves still run `bin/rails recording_studio:install:migrations && bin/rails db:migrate`. This dummy does not copy the Recording Studio `7.4`, `7.5`, or `7.7` core migrations.
+
 ## [0.5.1] - 2026-11-16
 
 ### Changed
