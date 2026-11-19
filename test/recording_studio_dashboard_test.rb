@@ -177,7 +177,8 @@ class RecordingStudioDashboardTest < Minitest::Test
     refute_includes gemfile, 'tag: "0.3.1"'
 
     root_gemfile = File.read(File.expand_path("../Gemfile", __dir__))
-    assert_includes root_gemfile, 'gem "recording_studio", "~> 7.8", github: "bowerbird-app/RecordingStudio", tag: "v7.8.0"'
+    assert_includes root_gemfile,
+                    'gem "recording_studio", "~> 7.8", github: "bowerbird-app/RecordingStudio", tag: "v7.8.0"'
     refute_includes root_gemfile, 'tag: "v7.7.1"'
     refute_includes root_gemfile, 'tag: "v7.4.0"'
     refute_includes root_gemfile, 'tag: "v7.0.0"'

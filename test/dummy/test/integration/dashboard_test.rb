@@ -148,7 +148,8 @@ class DashboardTest < ActionDispatch::IntegrationTest
 
   def assert_background_image
     assert_select "[data-recording-studio-default-layout=true] [data-flat-pack-layout-background=true]", count: 1
-    assert_select ".fp-backdrop-media img[alt=''][loading='lazy'][src*='dashboard-backdrop']", count: 1
+    assert_select ".fp-backdrop-media img[alt=''][decoding='async'][fetchpriority='low'][src*='dashboard-backdrop']", count: 1
+    assert_select ".fp-backdrop-media img[loading='lazy']", count: 0
     assert_select ".fp-backdrop-tint", count: 1
   end
 end

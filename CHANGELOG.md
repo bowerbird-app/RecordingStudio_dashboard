@@ -7,6 +7,7 @@
 - Development and dummy Gemfiles pin the latest GitHub release tags: Recording Studio `v7.8.0` (`~> 7.8`), Flatpack `v0.2.0` (`~> 0.2`), Accessible `v0.55.0` (`~> 0.55`), Trashable `v1.2.3` (`~> 1.2`, `require: false`), Root Switchable `v0.16.1` (`~> 0.16`), Metrics `v0.9.2` (`~> 0.9`), and Cache `v0.7.1` (`~> 0.7`).
 - Gemspec ranges stay `recording_studio` `>= 7.0`, `< 8.0` and `flat_pack` `>= 0.1.331`, `< 1.0`. `rails` stays `~> 8.1.0`. `view_component` stays `4.20.0`.
 - The dummy drops the manual `flat_pack/heroicons` importmap pin. The captured install page drops that pin and the `flat-pack--icon` controller. Heading-button tests assert the rendered plus icon SVG.
+- Dummy dashboard tests follow Recording Studio 7.8's backdrop image: `decoding="async"` and `fetchpriority="low"`, with no `loading` attribute.
 
 ### Upgrade
 
