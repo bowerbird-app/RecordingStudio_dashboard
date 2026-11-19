@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.0] - 2026-11-19
+
+### Changed
+
+- Development and dummy Gemfiles pin the latest GitHub release tags: Recording Studio `v7.8.0` (`~> 7.8`), Flatpack `v0.2.0` (`~> 0.2`), Accessible `v0.55.0` (`~> 0.55`), Trashable `v1.2.3` (`~> 1.2`, `require: false`), Root Switchable `v0.16.1` (`~> 0.16`), Metrics `v0.9.2` (`~> 0.9`), and Cache `v0.7.1` (`~> 0.7`).
+- Gemspec ranges stay `recording_studio` `>= 7.0`, `< 8.0` and `flat_pack` `>= 0.1.331`, `< 1.0`. `rails` stays `~> 8.1.0`. `view_component` stays `4.20.0`.
+- The dummy drops the manual `flat_pack/heroicons` importmap pin. The captured install page drops that pin and the `flat-pack--icon` controller. Heading-button tests assert the rendered plus icon SVG.
+
+### Upgrade
+
+- Pin `recording_studio_dashboard` to `0.6.0`. Hosts on `0.5.2` keep the same gemspec ranges. Hosts still on Flatpack `0.1.x` can resolve. No migration from this gem and no install-generator rerun.
+- Hosts MUST run the Recording Studio 7.4, 7.5 and 7.7 migrations if they have not. This dummy does not copy those core migrations.
+- flat_pack 0.2.0 is supported; hosts moving to 0.2 must remove the manual `flat_pack/heroicons` importmap pin and any `flat-pack--icon` controller registration.
+- Compare [v0.5.2...v0.6.0](https://github.com/bowerbird-app/RecordingStudio_dashboard/compare/v0.5.2...v0.6.0).
+
 ## [0.5.2] - 2026-11-18
 
 ### Changed
