@@ -4,9 +4,9 @@
 
 - Ruby 3.3 or newer
 - Rails 8.1 or newer
-- Recording Studio 7.0 or newer below 8.0 (`>= 7.0`, `< 8.0` in the gemspec; dummy GitHub tag `v7.7.1`)
-- Accessible dummy tag `v0.54.0`, Trashable dummy tag `v1.2.0` (`require: false`), Root Switchable dummy tag `v0.16.0`, Metrics dummy tag `v0.9.1`, and Cache dummy tag `v0.7.0`
-- FlatPack `0.1.331` through `0.x` (`>= 0.1.331`, `< 1.0` in the gemspec; dummy GitHub tag `v0.1.378`)
+- Recording Studio 7.0 or newer below 8.0 (`>= 7.0`, `< 8.0` in the gemspec; dummy GitHub tag `v7.8.0`, `~> 7.8`)
+- Accessible dummy tag `v0.55.0` (`~> 0.55`), Trashable dummy tag `v1.2.3` (`~> 1.2`, `require: false`), Root Switchable dummy tag `v0.16.1` (`~> 0.16`), Metrics dummy tag `v0.9.2` (`~> 0.9`), and Cache dummy tag `v0.7.1` (`~> 0.7`)
+- FlatPack `0.1.331` through `0.x` (`>= 0.1.331`, `< 1.0` in the gemspec; dummy GitHub tag `v0.2.0`, `~> 0.2`)
 
 Dashboard headers and section titles use Flatpack `.fp-on-backdrop`, which ships in `0.1.327`. Row actions and heading buttons are default buttons and stay outside that class. A registered row action shows only when a widget `prepare` returns `Preparation.content(..., truncated: true)`. Heading `buttons:` show even when that action is hidden. Reload Flatpack CSS after the bump. Do not rebuild Tailwind for this class. Do not rerun the install generator.
 
@@ -19,6 +19,8 @@ From `0.5.0`, pin `recording_studio_dashboard` to `0.5.0` or newer below the nex
 From `0.5.1`, the gemspec ranges stay the same. Development and dummy GitHub tags are Recording Studio `v7.4.0`, Flatpack `v0.1.377`, Accessible `v0.45.1`, Trashable `v1.0.0`, Root Switchable `v0.16.0`, Metrics `v0.9.0`, and Cache `v0.7.0`. Recording Studio `7.4.0` adds the index migration `20261116230000_add_recording_studio_recordings_root_type_creation_index` (`index_rs_recordings_on_root_type_created_at_id`). Hosts on `7.4.0` install and run core's migrations with `bin/rails recording_studio:install:migrations && bin/rails db:migrate`.
 
 From `0.5.2`, the gemspec ranges stay the same. Development and dummy GitHub tags are Recording Studio `v7.7.1`, Flatpack `v0.1.378`, Accessible `v0.54.0`, Trashable `v1.2.0`, Root Switchable `v0.16.0`, Metrics `v0.9.1`, and Cache `v0.7.0`. This dummy does not copy the Recording Studio `7.4`, `7.5`, or `7.7` core migrations. Hosts install and run core's migrations with `bin/rails recording_studio:install:migrations && bin/rails db:migrate`.
+
+From `0.6.0`, the gemspec ranges stay the same. Development and dummy GitHub tags are Recording Studio `v7.8.0` (`~> 7.8`), Flatpack `v0.2.0` (`~> 0.2`), Accessible `v0.55.0` (`~> 0.55`), Trashable `v1.2.3` (`~> 1.2`), Root Switchable `v0.16.1` (`~> 0.16`), Metrics `v0.9.2` (`~> 0.9`), and Cache `v0.7.1` (`~> 0.7`). `view_component` stays `4.20.0`. Hosts MUST run the Recording Studio 7.4, 7.5 and 7.7 migrations if they have not. This dummy does not copy those core migrations. flat_pack 0.2.0 is supported; hosts moving to 0.2 must remove the manual `flat_pack/heroicons` importmap pin and any `flat-pack--icon` controller registration. The dummy Tailwind `@source` stays the engine symlink `vendor/engines/flat_pack/app/components`. That link follows the installed revision, so the CSS path does not embed a git hash. Do not rerun `flat_pack:install`.
 
 Recording Studio `6.5` and newer refuses a write until `config.authorize_write` is set. The dummy policy allows an edit grant on the root, and an admin grant (or Accessible's access-creation context) when the recordable is an access grant. Seeds call `bootstrap_owner_access!` before child recordings. The mounted root switcher also requires an Accessible `:view` grant on the current root. Trashable `0.14.0` adds `purge_at` on `recording_studio_recordings`. Recording Studio `6.9` requires `root_recording_id` on `recording_studio_events`. The dummy copies `20261114090000_add_root_recording_id_to_recording_studio_events`. Run the dummy migrations after the pin bump.
 - Public RubyGems and GitHub access for dependency installation

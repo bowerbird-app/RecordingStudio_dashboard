@@ -24,7 +24,10 @@ class RowComponentTest < ViewComponent::TestCase
     assert_equal ["New", "Edit", "View all"], labels(doc)
     link = doc.at_css("[data-dashboard-row=notes] a[href='/new'][data-method=post]")
     assert link
-    assert_equal "plus", link.at_css("svg")["data-flat-pack--icon-name-value"]
+    svg = link.at_css("svg")
+    assert svg
+    assert_nil svg["data-flat-pack--icon-name-value"]
+    assert_equal "M12 4.5v15m7.5-7.5h-15", svg.at_css("path")["d"]
     assert_equal "Recent activity", doc.at_css("[data-dashboard-row=notes] .fp-section-title.fp-on-backdrop").text.squish
     assert_empty doc.css("[data-dashboard-row=notes] .fp-on-backdrop [data-fp-style=default]")
   end
